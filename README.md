@@ -3,10 +3,10 @@
 
 
 
-Dynamic Web Applications
+Dynamic Web Applications.
+
+DWA_01 is a pdf file which is theory based on Manging Complexity in Software.
 
 
 
-
-
-This Folder consists of all DWA challenges done as practice and project/s from CodeSpace Academy 
+This Folder consists of all DWA challenges done as practice and project/s from CodeSpace Academy.
