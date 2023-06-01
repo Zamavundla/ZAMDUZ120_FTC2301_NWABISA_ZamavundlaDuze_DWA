@@ -22,7 +22,7 @@ form.addEventListener("submit", (event) => {
 		body.innerText = "Something critical went wrong. Please reload the page"
 		console.error("Something critical went wrong. Please reload the page");
 	} else {
-		result.innerText = Math.floor(dividend / divider);
+		result.innerText = Math.floor(dividend / divider); // Math.floor used to remove decimals
 	}
 
 });
