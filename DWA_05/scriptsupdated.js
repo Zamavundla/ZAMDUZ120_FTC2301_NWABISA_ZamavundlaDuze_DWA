@@ -5,11 +5,16 @@ const result = document.querySelector("[data-result]");
 
 form.addEventListener("submit", (event) => {
   event.preventDefault();
+
+  const entries = new FormData(event.target);
+  const { dividend, divider } = Object.fromEntries(entries);
+  result.innerText = dividend / divider;
+
   const dividendInput = document.getElementById("dividend");
   const dividerInput = document.getElementById("divider");
   
-  const dividend = parseFloat(dividendInput.value);
-  const divider = parseFloat(dividerInput.value);
+  //const dividend = parseFloat(dividendInput.value);
+  //const divider = parseFloat(dividerInput.value);
   
   if (isNaN(dividend) || isNaN(divider)) {
     result.innerText = "Something critical went wrong. Please reload the page.";
