@@ -11,14 +11,14 @@ form.addEventListener("submit", (event) => {
   const entries = new FormData(event.target);
   const { dividend, divider } = Object.fromEntries(entries);
   
-  if (dividend === "" || divider === "") {
+  if (dividend === "" || divider === "") {    //if you haven't put any input or you input is incomplete.
 		result.innerText = "Division not performed. Both values are required in inputs. Try again"
 
-	} else if (dividend < 0 || divider < 0) {
+	} else if (dividend < 0 || divider < 0) { // if you have provided a string input
 		result.innerText = "Division not performed. Invalid number provided. Try again"
 		console.error("Division not performed. Invalid number provided. Try again");
 
-	} else if (dividend == "YOLO" || divider == "+++") {
+	} else if (dividend == "YOLO" || divider == "+++") { 
 		body.innerText = "Something critical went wrong. Please reload the page"
 		console.error("Something critical went wrong. Please reload the page");
 	} else {
