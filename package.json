@@ -1,0 +1,15 @@
+{
+  "name": "zamduz120_ftc2301_nwabisa_zamavundladuze_dwa",
+  "version": "1.0.0",
+  "description": "Dynamic Web Applications.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "jsdoc": "^4.0.2"
+  }
+}
