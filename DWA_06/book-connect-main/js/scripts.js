@@ -1,7 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 /* eslint-disable import/no-cycle */
 /* eslint-disable import/extensions */
-import { books } from './data';
+import { books } from './data.js';
 
 import {
   appendBooks,
@@ -12,7 +12,7 @@ import {
   handleSearchOverlay,
   searchDialog,
   lightToggleDialog,
-} from './handlers';
+} from './handlers.js';
 
 /* -------------------------------------DOM ELEMENTS STORAGE OBJECT------------------------------ */
 

@@ -9,9 +9,9 @@
 /* eslint linebreak-style: ["error", "windows"] */
 import {
     books, genres, authors, BOOKS_PER_PAGE,
-  } from './data';
+  } from './data.js';
   
-  import { data } from './scripts';
+  import { data } from './scripts.js';
   
   /* ---------------------------------------GLOBAL VARIABLES--------------------------------------- */
   
