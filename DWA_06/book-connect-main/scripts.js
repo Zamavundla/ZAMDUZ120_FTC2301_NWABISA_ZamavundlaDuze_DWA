@@ -1,186 +1,114 @@
-/*const matches = books
-const page = 1;
+/* eslint-disable import/prefer-default-export */
+/* eslint-disable import/no-cycle */
+/* eslint-disable import/extensions */
+import { books } from './data.js';
 
-if (!books && !Array.isArray(books)) throw new Error('Source required') 
-if (!range && range.length < 2) throw new Error('Range must be an array with two numbers')
+import {
+  appendBooks,
+  showMoreAction,
+  descriptionOverlay,
+  searchBooks,
+  changeTheme,
+  handleSearchOverlay,
+  searchDialog,
+  lightToggleDialog,
+} from './functions.js';
 
-day = {
-    dark: '10, 10, 20',
-    light: '255, 255, 255',
+/* -------------------------------------DOM ELEMENTS STORAGE OBJECT------------------------------ */
+
+/**
+ * this object has the query selectors for all the DOM elements used in the javascript
+ */
+export const data = {
+  home: {
+    root: document.documentElement,
+    main: document.querySelector('[data-list-items]'),
+    SHOW_MORE_BTN: document.querySelector('[data-list-button]'),
+    logoText: document.querySelector('.header__text'),
+    bookCards: document.querySelectorAll('preview'),
+    search: document.querySelector('[data-header-search]'),
+    themeBtn: document.querySelector('[data-header-settings]'),
+  },
+  summary: {
+    overlay: document.querySelector('[data-list-active]'),
+    close: document.querySelector('[data-list-close]'),
+  },
+  search: {
+    overlay: document.querySelector('[data-search-overlay]'),
+    title: document.querySelector('[data-search-title]'),
+    searchBtn: document.querySelector('[data-search-overlay]').querySelectorAll('button')[1],
+    searchCancelBtn: document.querySelector('[data-search-overlay]').querySelectorAll('button')[0],
+  },
+  theme: {
+    overlay: document.querySelector('[data-settings-overlay]'),
+    toggleSaveBtn: document.querySelector('[data-settings-overlay]').querySelectorAll('button')[1],
+    toggleCancelBtn: document.querySelector('[data-settings-overlay]').querySelectorAll('button')[0],
+  },
+};
+
+/* ---------------------------------------HOME PAGE DISPLAY-------------------------------------- */
+
+/* calling the function to load the page with book list using an event
+listener for when the page first loads  */
+data.home.root.addEventListener('load', appendBooks(books));
+
+/* use event listener to make button load more books with the
+showMoreAction function */
+data.home.SHOW_MORE_BTN.addEventListener('click', showMoreAction);
+
+/* this event listener return to home button when you click on the book connect
+text and logo */
+data.home.logoText.addEventListener('click', (event) => {
+  event.preventDefault();
+  // Clear the book list on the homepage
+  document.querySelector('[data-list-items]').innerHTML = '';
+  // call this function to load the page again
+  appendBooks(books);
+});
+
+/* make the summary overlay show when a book is clicked
+ Used a for loop to iterate over all the book buttons so that
+ each one can be clicked on */
+const bookList = document.querySelectorAll('.preview');
+// eslint-disable-next-line no-restricted-syntax
+for (const singleBook of bookList) {
+  singleBook.addEventListener('click', descriptionOverlay);
 }
 
-night = {
-    dark: '255, 255, 255',
-    light: '10, 10, 20',
-}
+/* ----------------------------------------------SEARCH------------------------------------------ */
 
-fragment = document.createDocumentFragment()
-let extracted = books.slice(0, 36)
+// this is to carry out the book search when the search button is clicked
+data.search.searchBtn.addEventListener('click', searchBooks);
 
-for ({ author, image, title, id }; extracted; i++) {
-    const preview = createPreview({
-        author,
-        id,
-        image,
-        title
-    })
+// this is to close the overlay when the search is done
+data.search.searchBtn.addEventListener('click', (event) => {
+  event.preventDefault();
+  searchDialog.close();
+});
 
-    fragment.appendChild(preview)
-}
+// this is to close the search overlay when the cancel button is clicked
+data.search.searchCancelBtn.addEventListener('click', (event) => {
+  event.preventDefault();
+  searchDialog.close();
+});
 
-data-list-items.appendChild(fragment)
+/* event listener for the search button to bring out the overlay */
+const homeSearchBtn = data.home.search;
+homeSearchBtn.addEventListener('click', handleSearchOverlay);
 
-genres = document.createDocumentFragment()
-element = document.createElement('option')
-element.value = 'any'
-element = 'All Genres'
-genres.appendChild(element)
+/* ----------------------------------------LIGHT/DARK TOGGLE--------------------------------------*/
 
-for ([id, name]; Object.entries(genres); i++) {
-    document.createElement('option')
-    element.value = value
-    element.innerText = text
-    genres.appendChild(element)
-}
+// This is the event listener that shows the light/dark toggle overlay
+data.home.themeBtn.addEventListener('click', (event) => {
+  event.preventDefault();
+  lightToggleDialog.showModal();
+});
 
-data-search-genres.appendChild(genres)
+/* event listener for the save button in the light/dark toggle dialog */
+data.theme.toggleSaveBtn.addEventListener('click', changeTheme);
 
-authors = document.createDocumentFragment()
-element = document.createElement('option')
-element.value = 'any'
-element.innerText = 'All Authors'
-authors.appendChild(element)
-
-for ([id, name];Object.entries(authors); id++) {
-    document.createElement('option')
-    element.value = value
-    element = text
-    authors.appendChild(element)
-}
-
-data-search-authors.appendChild(authors)
-
-data-settings-theme.value === window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'night' : 'day'
-v = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches? 'night' | 'day'
-
-documentElement.style.setProperty('--color-dark', css[v].dark);
-documentElement.style.setProperty('--color-light', css[v].light);
-data-list-button = "Show more (books.length - BOOKS_PER_PAGE)"
-
-data-list-button.disabled = !(matches.length - [page * BOOKS_PER_PAGE] > 0)
-
-data-list-button.innerHTML = /* html *//* [
-    '<span>Show more</span>',
-    '<span class="list__remaining"> (${matches.length - [page * BOOKS_PER_PAGE] > 0 ? matches.length - [page * BOOKS_PER_PAGE] : 0})</span>',
-]
-
-data-search-cancel.click() { data-search-overlay.open === false }
-data-settings-cancel.click() { querySelect(data-settings-overlay).open === false }
-data-settings-form.submit() { actions.settings.submit }
-data-list-close.click() { data-list-active.open === false }
-
-data-list-button.click() {
-    document.querySelector([data-list-items]).appendChild(createPreviewsFragment(matches, page x BOOKS_PER_PAGE, {page + 1} x BOOKS_PER_PAGE]))
-    actions.list.updateRemaining()
-    page = page + 1
-}
-
-data-header-search.click() {
-    data-search-overlay.open === true ;
-    data-search-title.focus();
-}
-
-data-search-form.click(filters) {
-    preventDefault()
-    const formData = new FormData(event.target)
-    const filters = Object.fromEntries(formData)
-    result = []
-
-    for (book; booksList; i++) {
-        titleMatch = filters.title.trim() = '' && book.title.toLowerCase().includes[filters.title.toLowerCase()]
-        authorMatch = filters.author = 'any' || book.author === filters.author
-
-        {
-            genreMatch = filters.genre = 'any'
-            for (genre; book.genres; i++) { if singleGenre = filters.genre { genreMatch === true }}}
-        }
-
-        if titleMatch && authorMatch && genreMatch => result.push(book)
-    }
-
-    if display.length < 1 
-    data-list-message.class.add('list__message_show')
-    else data-list-message.class.remove('list__message_show')
-    
-
-    data-list-items.innerHTML = ''
-    const fragment = document.createDocumentFragment()
-    const extracted = source.slice(range[0], range[1])
-
-    for ({ author, image, title, id }; extracted; i++) {
-        const { author: authorId, id, image, title } = props
-
-        element = document.createElement('button')
-        element.classList = 'preview'
-        element.setAttribute('data-preview', id)
-
-        element.innerHTML = /* html *//* `
-            <img
-                class="preview__image"
-                src="${image}"
-            />
-            
-            <div class="preview__info">
-                <h3 class="preview__title">${title}</h3>
-                <div class="preview__author">${authors[authorId]}</div>
-            </div>
-        `
-
-        fragment.appendChild(element)
-    }
-    
-    data-list-items.appendChild(fragments)
-    initial === matches.length - [page * BOOKS_PER_PAGE]
-    remaining === hasRemaining ? initial : 0
-    data-list-button.disabled = initial > 0
-
-    data-list-button.innerHTML = /* html */ /*`
-        <span>Show more</span>
-        <span class="list__remaining"> (${remaining})</span>
-    `
-
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    data-search-overlay.open = false
-}
-
-data-settings-overlay.submit; {
-    preventDefault()
-    const formData = new FormData(event.target)
-    const result = Object.fromEntries(formData)
-    document.documentElement.style.setProperty('--color-dark', css[result.theme].dark);
-    document.documentElement.style.setProperty('--color-light', css[result.theme].light);
-    data-settings-overlay).open === false
-}
-
-data-list-items.click() {
-    pathArray = Array.from(event.path || event.composedPath())
-    active;
-
-    for (node; pathArray; i++) {
-        if active break;
-        const previewId = node?.dataset?.preview
-    
-        for (const singleBook of books) {
-            if (singleBook.id === id) active = singleBook
-        } 
-    }
-    
-    if !active return
-    data-list-active.open === true
-    data-list-blur + data-list-image === active.image
-    data-list-title === active.title
-    
-    data-list-subtitle === '${authors[active.author]} (${Date(active.published).year})'
-    data-list-description === active.description
-}
-*/
+/* event listener for cancel button to remove overlay */
+data.theme.toggleCancelBtn.addEventListener('click', (event) => {
+  event.preventDefault();
+  lightToggleDialog.close();
+});
