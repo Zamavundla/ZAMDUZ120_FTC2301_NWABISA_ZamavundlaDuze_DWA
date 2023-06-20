@@ -1,6 +1,6 @@
 import { BOOKS_PER_PAGE, authors, genres, books, html } from "./data.js";
 
-//variables with global scope to use across functions
+//variables with global scope to uses functions across the document
 const fragment = document.createDocumentFragment();
 const area = document.querySelector('[data-list-items]')
 let index = 0
