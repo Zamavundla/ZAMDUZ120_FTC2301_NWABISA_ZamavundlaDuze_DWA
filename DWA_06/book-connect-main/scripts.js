@@ -1,4 +1,4 @@
-import { BOOKS_PER_PAGE, authors, genres, books, html } from "/Users/suppo/OneDrive/Documents/CodeSpace Academy Challenges/Dynamic Web Applications/ZAMDUZ120_FTC2301_NWABISA_ZamavundlaDuze_DWA/DWA_06/book-connect-main/data";
+import { BOOKS_PER_PAGE, authors, genres, books, html } from "./data.js";
 
 //variables with global scope to uses functions across the document
 const fragment = document.createDocumentFragment();
