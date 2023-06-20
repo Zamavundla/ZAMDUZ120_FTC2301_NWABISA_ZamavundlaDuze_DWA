@@ -1,4 +1,4 @@
-import { BOOKS_PER_PAGE, authors, genres, books, html } from "./data";
+import { BOOKS_PER_PAGE, authors, genres, books, html } from "./data.js";
 
 //variables with global scope to uses functions across the document
 const fragment = document.createDocumentFragment();
@@ -11,12 +11,12 @@ html.list.button.textContent = "Show More" + "(" + books.length + ")"
  * how many books have been loaded so far.
  */
 const loadBooks = (event) => {
-    event.preventDefault()
-    html.list.message.classList = 'list__message'
+    event.preventDefault();
+    html.list.message.classList = 'list__message';
     const extracted = books.slice(index, index + BOOKS_PER_PAGE);
-    const booksLeft = books.length - index
-    html.list.button.textContent = "Show More" + "(" + booksLeft + ")"
-    for (let i = index; i < index + BOOKS_PER_PAGE; i++) {
+    const booksLeft = Math.min(BOOKS_PER_PAGE, books.length - index);
+    html.list.button.textContent = "Show More" + "(" + booksLeft + ")";
+    for (let i = index; i < index + booksLeft; i++) {
         const book = books[i]
         const image = book.image
         const title = book.title
@@ -44,10 +44,11 @@ window.addEventListener('load', loadBooks)
  * because it needs to work for multiple buttons.
  */
 document.addEventListener('click', (event) => {
-    if (html.list.overlay.active.hasAttribute('open')) {
-        html.list.overlay.active.removeAttribute('open')
-        
-    } else {
+    const button = event.target.closest('.preview');
+    if (button === null) {
+      return;
+        }
+         else {
         const button = event.target.closest('.preview')
         if (button == null) {
             return;
@@ -157,32 +158,24 @@ const handleSearchSubmit = (event) => {
       "author": html.search.author.value,
       "genre": html.search.genre.value
     };
-    const found = [];
-    for (let x in search) {
-      if (search[x] === "" || search[x] === "all authors" || search[x] === "all genres") {
-        continue; // skip this search field
-      }
-      let match = books.filter(book => {
-        if (x === "title") {
-          return book.title.toLowerCase().includes(search[x].toLowerCase()); // check if title includes search phrase
-        } else if (x === "genre") {
-          return book.genres.includes(search[x]); // check if search value is included in genre array
-        } else {
-          return book[x] === search[x];
-        }
-      });  
-      if (match !== null && !found.includes(match)) {
-          found.push(match);
-      }
-    }
-    html.search.genre.value = 'All genres'
-    html.search.author.value = 'All authors'
-    html.search.title.value = ''
-    console.log(found)
-    return handleSearchResults(found[0])
-}
-html.search.submit.addEventListener('click', handleSearchSubmit)
-
+    const found = books.filter(book => {
+      const { title, author, genres } = book;
+      const lowercasedTitle = title.toLowerCase();
+      const lowercasedAuthor = authors[author].toLowerCase();
+      const lowercasedGenre = genres.map(genre => genre.toLowerCase());
+  
+      const isTitleMatch = search.title === "" || lowercasedTitle.includes(search.title.toLowerCase());
+      const isAuthorMatch = search.author === "" || lowercasedAuthor.includes(search.author.toLowerCase());
+      const isGenreMatch = search.genre === "" || lowercasedGenre.includes(search.genre.toLowerCase());
+  
+      return isTitleMatch && isAuthorMatch && isGenreMatch;
+    });
+  
+    return handleSearchResults(found);
+  };
+  
+  html.search.submit.addEventListener('click', handleSearchSubmit);
+  
 /**Creates search result elements using the results from handleSearchSubmit(). 
  * Shows the results in the main body, unless no results are found in which case
  * an error message shall appear
