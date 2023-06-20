@@ -1,4 +1,4 @@
-import { BOOKS_PER_PAGE, authors, genres, books, html } from "./data.js";
+import { BOOKS_PER_PAGE, authors, genres, books, html } from "./data";
 
 // Variables with global scope to use across functions
 const fragment = document.createDocumentFragment();
