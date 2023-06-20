@@ -1,79 +1,84 @@
 import { BOOKS_PER_PAGE, authors, genres, books, html } from "./data.js";
 
-/**
- * Display book previews on the webpage.
- * @param {Array} books - Array of book objects to display as previews.
- */
-const displayBookPreviews = (books) => {
-  const fragment = document.createDocumentFragment();
-  const area = document.querySelector('[data-list-items]');
-
-  area.innerHTML = '';
-
-  books.forEach((book) => {
-    const { image, title, author, id } = book;
-
-    const element = document.createElement('button');
-    element.classList = 'preview';
-    element.setAttribute('id', id);
-    element.innerHTML = `
-      <img class="preview__image" src="${image}" />
-      <div class="preview__info" data-box>
-        <h3 class="preview__title">${title}</h3>
-        <div class="preview__author">${authors[author]}</div>
-      </div>`;
-
-    fragment.appendChild(element);
-  });
-
-  area.appendChild(fragment);
-};
+// Variables with global scope to use across functions
+const fragment = document.createDocumentFragment();
+const area = document.querySelector('[data-list-items]');
+let index = 0;
 
 /**
- * Load and display a batch of books on the webpage.
- * @param {Event} event - The click event triggered by the "Show More" button.
+ * Loads the next set of books when the "Show More" button is clicked.
+ * Displays BOOKS_PER_PAGE number of books each time.
+ * Uses the global index variable to track the number of books loaded so far.
  */
 const loadBooks = (event) => {
   event.preventDefault();
   html.list.message.classList = 'list__message';
 
   const extracted = books.slice(index, index + BOOKS_PER_PAGE);
-  const booksLeft = Math.min(BOOKS_PER_PAGE, books.length - index);
-
+  const booksLeft = books.length - index;
   html.list.button.textContent = `Show More (${booksLeft})`;
-  displayBookPreviews(extracted);
 
+  for (let i = index; i < index + BOOKS_PER_PAGE; i++) {
+    const book = books[i];
+    const { image, title, author: authorId, id } = book;
+
+    const element = document.createElement('button');
+    element.classList = 'preview';
+    element.setAttribute('id', id);
+    element.innerHTML = /* html */ `
+      <img class="preview__image" src="${image}"/>
+      <div class="preview__info" data-box>
+        <h3 class="preview__title">${title}</h3>
+        <div class="preview__author">${authors[authorId]}</div>
+      </div>`;
+
+    fragment.appendChild(element);
+  }
+
+  area.appendChild(fragment);
   index += extracted.length;
 };
 
 html.list.button.addEventListener('click', loadBooks);
 window.addEventListener('load', loadBooks);
 
+/**
+ * Event listener that displays the book preview when a book is clicked.
+ */
 document.addEventListener('click', (event) => {
-  const button = event.target.closest('.preview');
-  if (button === null) {
-    return;
+  if (html.list.overlay.active.hasAttribute('open')) {
+    html.list.overlay.active.removeAttribute('open');
   } else {
+    const button = event.target.closest('.preview');
+    if (button == null) {
+      return;
+    }
+
     const book = books.find((book) => book.id === button.id);
     const year = new Date(book.published).getFullYear();
-    const title = html.list.overlay.title;
-    title.innerText = book.title;
-    const image = book.image;
+
+    const { title, image, description, author: authorId } = book;
+    const titleElement = html.list.overlay.title;
+    titleElement.innerText = title;
+
     const imageElement = document.querySelector('[data-list-image]');
     imageElement.src = image;
+
     const blurElement = document.querySelector('[data-list-blur]');
     blurElement.src = image;
-    const description = html.list.overlay.description;
-    description.innerText = book.description;
-    const subtitle = html.list.overlay.subtitle;
-    subtitle.innerText = `${authors[book.author]} (${year})`;
+
+    const descriptionElement = html.list.overlay.description;
+    descriptionElement.innerText = description;
+
+    const subtitleElement = html.list.overlay.subtitle;
+    subtitleElement.innerText = `${authors[authorId]} (${year})`;
+
     html.list.overlay.active.setAttribute('open', true);
   }
 });
 
 /**
- * Toggle the search dialog's visibility.
- * @param {Event} event - The click event triggered by the search button or cancel button.
+ * Opens and closes the search overlay.
  */
 const handleSearchToggle = (event) => {
   event.preventDefault();
@@ -88,8 +93,7 @@ html.search.button.addEventListener('click', handleSearchToggle);
 html.search.cancel.addEventListener('click', handleSearchToggle);
 
 /**
- * Toggle the settings dialog's visibility.
- * @param {Event} event - The click event triggered by the settings button or cancel button.
+ * Opens and closes the settings overlay.
  */
 const handleSettingsToggle = (event) => {
   event.preventDefault();
@@ -104,30 +108,25 @@ html.settings.button.addEventListener('click', handleSettingsToggle);
 html.settings.cancel.addEventListener('click', handleSettingsToggle);
 
 /**
- * Save the settings and update the theme.
- * @param {Event} event - The click event triggered by the save button.
+ * Saves the selected theme and changes colors to light or dark
+ * depending on the saved selection.
  */
 const handleSettingsSave = (event) => {
   event.preventDefault();
-  const selectedTheme = html.settings.theme.value;
-  localStorage.setItem('theme', selectedTheme);
-  applyTheme(selectedTheme);
-  handleSettingsToggle(event);
+  if (html.settings.theme.value === 'night') {
+    document.documentElement.style.setProperty('--color-dark', '255, 255, 255');
+    document.documentElement.style.setProperty('--color-light', '10, 10, 20');
+  } else {
+    document.documentElement.style.setProperty('--color-dark', '10, 10, 20');
+    document.documentElement.style.setProperty('--color-light', '255, 255, 255');
+  }
+  html.settings.dialog.removeAttribute('open');
 };
 
 html.settings.save.addEventListener('click', handleSettingsSave);
 
 /**
- * Apply the selected theme to the webpage.
- * @param {string} theme - The selected theme to apply.
- */
-const applyTheme = (theme) => {
-  document.documentElement.setAttribute('data-theme', theme);
-};
-
-/**
- * Create the genre options in the search dialog.
- * @param {Event} event - The click event triggered by the search button.
+ * Adds genre options to the select element on the search overlay.
  */
 const createGenreOptionsHtml = (event) => {
   event.preventDefault();
@@ -146,8 +145,7 @@ const createGenreOptionsHtml = (event) => {
 html.search.button.addEventListener('click', createGenreOptionsHtml);
 
 /**
- * Create the author options in the search dialog.
- * @param {Event} event - The change event triggered by the author select element.
+ * Adds author options to the select element on the search overlay.
  */
 const createAuthorOptionsHtml = (event) => {
   event.preventDefault();
@@ -163,60 +161,86 @@ const createAuthorOptionsHtml = (event) => {
   html.search.author.appendChild(fragment);
 };
 
-html.search.author.addEventListener('change', createAuthorOptionsHtml);
+html.search.author.addEventListener('click', createAuthorOptionsHtml);
 
 /**
- * Handle the search form submission and display search results.
- * @param {Event} event - The submit event triggered by the search form.
+ * Searches for books based on the selected search criteria.
  */
 const handleSearchSubmit = (event) => {
   event.preventDefault();
   const search = {
-    title: html.search.title.value.toLowerCase(),
+    title: html.search.title.value,
     author: html.search.author.value,
     genre: html.search.genre.value,
   };
 
-  const found = books.filter((book) => {
-    const { title, author, genres } = book;
-    const lowercasedTitle = title.toLowerCase();
-    const lowercasedAuthor = authors[author].toLowerCase();
-    const lowercasedGenre = genres.map((genre) => genre.toLowerCase());
+  const found = [];
+  for (let x in search) {
+    if (
+      search[x] === '' ||
+      search[x] === 'all authors' ||
+      search[x] === 'all genres'
+    ) {
+      continue; // Skip this search field
+    }
 
-    const isTitleMatch = search.title === "" || lowercasedTitle.includes(search.title);
-    const isAuthorMatch = search.author === "" || lowercasedAuthor.includes(search.author.toLowerCase());
-    const isGenreMatch = search.genre === "" || lowercasedGenre.includes(search.genre.toLowerCase());
+    let match = books.filter((book) => {
+      if (x === 'title') {
+        return book.title.toLowerCase().includes(search[x].toLowerCase());
+      } else if (x === 'genre') {
+        return book.genres.includes(search[x]);
+      } else {
+        return book[x] === search[x];
+      }
+    });
 
-    return isTitleMatch && isAuthorMatch && isGenreMatch;
-  });
+    if (match !== null && !found.includes(match)) {
+      found.push(match);
+    }
+  }
 
-  handleSearchResults(found);
+  html.search.genre.value = 'All genres';
+  html.search.author.value = 'All authors';
+  html.search.title.value = '';
+
+  return handleSearchResults(found[0]);
 };
 
 html.search.submit.addEventListener('click', handleSearchSubmit);
 
 /**
- * Handle the search results and display book previews or an error message.
- * @param {Array} found - Array of books that match the search criteria.
+ * Displays the search results in the main body.
+ * Shows an error message if no results are found.
  */
 const handleSearchResults = (found) => {
   if (typeof found === 'undefined') {
     html.search.dialog.removeAttribute('open');
     return;
   } else if (found.length === 0) {
-    const area = document.querySelector('[data-list-items]');
     area.innerHTML = '';
     html.list.message.classList = 'list__message_show';
   } else {
     html.list.message.classList = 'list__message';
-    displayBookPreviews(found);
+    area.innerHTML = '';
+
+    for (let i = 0; i < found.length; i++) {
+      const book = found[i];
+      const { image, title, author: authorId, id } = book;
+
+      const element = document.createElement('button');
+      element.classList = 'preview';
+      element.setAttribute('id', id);
+      element.innerHTML = /* html */ `
+        <img class="preview__image" src="${image}"/>
+        <div class="preview__info" data-box>
+            <h3 class="preview__title">${title}</h3>
+            <div class="preview__author">${authors[authorId]}</div>
+        </div> `;
+      fragment.appendChild(element);
+    }
+
+    area.appendChild(fragment);
   }
 
   html.search.dialog.removeAttribute('open');
 };
-
-// Initial theme setup
-const savedTheme = localStorage.getItem('theme');
-if (savedTheme) {
-  applyTheme(savedTheme);
-}
