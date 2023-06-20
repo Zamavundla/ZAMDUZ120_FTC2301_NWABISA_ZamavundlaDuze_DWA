@@ -4,6 +4,7 @@ import { BOOKS_PER_PAGE, authors, genres, books, html } from "./data";
 const fragment = document.createDocumentFragment();
 const area = document.querySelector('[data-list-items]');
 let index = 0;
+html.list.button.textContent = "Show More" + "(" + books.length + ")"
 
 /**
  * Loads the next set of books when the "Show More" button is clicked.
@@ -20,7 +21,10 @@ const loadBooks = (event) => {
 
   for (let i = index; i < index + BOOKS_PER_PAGE; i++) {
     const book = books[i];
-    const { image, title, author: authorId, id } = book;
+    const image = book.image
+    const title = book.title
+    const authorId = book.author
+    const id = book.id
 
     const element = document.createElement('button');
     element.classList = 'preview';
@@ -59,7 +63,7 @@ document.addEventListener('click', (event) => {
 
     const { title, image, description, author: authorId } = book;
     const titleElement = html.list.overlay.title;
-    titleElement.innerText = title;
+    titleElement.innerText = book.title;
 
     const imageElement = document.querySelector('[data-list-image]');
     imageElement.src = image;
@@ -68,10 +72,10 @@ document.addEventListener('click', (event) => {
     blurElement.src = image;
 
     const descriptionElement = html.list.overlay.description;
-    descriptionElement.innerText = description;
+    descriptionElement.innerText = book.description;
 
     const subtitleElement = html.list.overlay.subtitle;
-    subtitleElement.innerText = `${authors[authorId]} (${year})`;
+    subtitleElement.innerText = `${authors[book.author]} (` + `${year})`;
 
     html.list.overlay.active.setAttribute('open', true);
   }
@@ -114,11 +118,11 @@ html.settings.cancel.addEventListener('click', handleSettingsToggle);
 const handleSettingsSave = (event) => {
   event.preventDefault();
   if (html.settings.theme.value === 'night') {
-    document.documentElement.style.setProperty('--color-dark', '255, 255, 255');
-    document.documentElement.style.setProperty('--color-light', '10, 10, 20');
+    document.documentElement.style.setProperty("--color-dar", '255, 255, 255');
+    document.documentElement.style.setProperty("--color-light", '10, 10, 20');
   } else {
-    document.documentElement.style.setProperty('--color-dark', '10, 10, 20');
-    document.documentElement.style.setProperty('--color-light', '255, 255, 255');
+    document.documentElement.style.setProperty("--color-dark", '10, 10, 20');
+    document.documentElement.style.setProperty("--color-light", '255, 255, 255');
   }
   html.settings.dialog.removeAttribute('open');
 };
@@ -151,7 +155,7 @@ const createAuthorOptionsHtml = (event) => {
   event.preventDefault();
   const fragment = document.createDocumentFragment();
 
-  for (const [key, value] of Object.entries(authors)) {
+  for (const [key, value] of Object.entries(genres)) {
     const option = document.createElement('option');
     option.value = key;
     option.innerText = value;
@@ -161,7 +165,8 @@ const createAuthorOptionsHtml = (event) => {
   html.search.author.appendChild(fragment);
 };
 
-html.search.author.addEventListener('click', createAuthorOptionsHtml);
+html.search.button.addEventListener('click', createAuthorOptionsHtml);
+
 
 /**
  * Searches for books based on the selected search criteria.
@@ -169,26 +174,26 @@ html.search.author.addEventListener('click', createAuthorOptionsHtml);
 const handleSearchSubmit = (event) => {
   event.preventDefault();
   const search = {
-    title: html.search.title.value,
-    author: html.search.author.value,
-    genre: html.search.genre.value,
+   "title": html.search.title.value,
+    "author": html.search.author.value,
+    "genre": html.search.genre.value,
   };
 
   const found = [];
   for (let x in search) {
     if (
-      search[x] === '' ||
-      search[x] === 'all authors' ||
-      search[x] === 'all genres'
+      search[x] === "" ||
+      search[x] === "all authors" ||
+      search[x] === "all genres"
     ) {
       continue; // Skip this search field
     }
 
     let match = books.filter((book) => {
-      if (x === 'title') {
+      if (x === "title") {
         return book.title.toLowerCase().includes(search[x].toLowerCase());
-      } else if (x === 'genre') {
-        return book.genres.includes(search[x]);
+      } else if (x === "genre") {
+        return book.genres.includes(search[x]); // checks if search parameters is included in the genre array.
       } else {
         return book[x] === search[x];
       }
