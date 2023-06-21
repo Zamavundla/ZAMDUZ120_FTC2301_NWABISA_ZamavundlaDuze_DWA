@@ -58,28 +58,22 @@ document.addEventListener('click', (event) => {
       return;
     }
 
-    const book = books.find((book) => book.id === button.id);
-    const year = new Date(book.published).getFullYear();
-
-    const { title, image, description, author: authorId } = book;
-    const titleElement = html.list.overlay.title;
-    titleElement.innerText = book.title;
-
-    const imageElement = document.querySelector('[data-list-image]');
-    imageElement.src = image;
-
-    const blurElement = document.querySelector('[data-list-blur]');
-    blurElement.src = image;
-
-    const descriptionElement = html.list.overlay.description;
-    descriptionElement.innerText = book.description;
-
-    const subtitleElement = html.list.overlay.subtitle;
-    subtitleElement.innerText = `${authors[book.author]} (` + `${year})`;
-
-    html.list.overlay.active.setAttribute('open', true);
-  }
-});
+    const book = books.find(book => book.id === button.id)
+    const year = new Date(book.published).getFullYear()
+    const title = html.list.overlay.title
+    title.innerText = book.title
+    const image = book.image
+    const imageElement = document.querySelector('[data-list-image]')
+    imageElement.src = image
+    const blurElement = document.querySelector('[data-list-blur]')
+    blurElement.src=image
+    const description = html.list.overlay.description
+    description.innerText = book.description
+    const subtitle = html.list.overlay.subtitle
+    subtitle.innerText = `${authors[book.author]} (` + `${year})`
+    html.list.overlay.active.setAttribute('open', true)
+}
+})
 
 /**
  * Opens and closes the search overlay.
@@ -230,7 +224,10 @@ const handleSearchResults = (found) => {
 
     for (let i = 0; i < found.length; i++) {
       const book = found[i];
-      const { image, title, author: authorId, id } = book;
+      const image = book.image
+      const title = book.title
+      const authorId = book.author
+      const id = book.id
 
       const element = document.createElement('button');
       element.classList = 'preview';
