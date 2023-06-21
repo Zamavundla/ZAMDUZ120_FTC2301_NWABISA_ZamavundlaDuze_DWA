@@ -1,3 +1,5 @@
+//@ts-check
+
 import { BOOKS_PER_PAGE, authors, genres, books } from "./data.js";
 
 //These are query selectors for each user story which makes the bookconnect works.
@@ -55,10 +57,12 @@ let index = 0;
  */
 const loadBooks = (event) => {
   event.preventDefault();
+  // @ts-ignore
   html.list.message.classList = 'list__message';
 
   const extracted = books.slice(index, index + BOOKS_PER_PAGE);
   const booksLeft = books.length - index;
+  // @ts-ignore
   html.list.button.textContent = `Show More (${booksLeft})`;
 
   for (let i = index; i < index + BOOKS_PER_PAGE; i++) {
@@ -66,6 +70,7 @@ const loadBooks = (event) => {
     const { image, title, author: authorId, id } = book;
 
     const element = document.createElement('button');
+    // @ts-ignore
     element.classList = 'preview';
     element.setAttribute('id', id);
     element.innerHTML = /* html */ `
@@ -78,10 +83,12 @@ const loadBooks = (event) => {
     fragment.appendChild(element);
   }
 
+  // @ts-ignore
   area.appendChild(fragment);
   index += extracted.length;
 };
 
+// @ts-ignore
 html.list.button.addEventListener('click', loadBooks);
 window.addEventListener('load', loadBooks);
 
@@ -89,33 +96,44 @@ window.addEventListener('load', loadBooks);
  * Event listener that displays the book preview when a book is clicked.
  */
 document.addEventListener('click', (event) => {
+  // @ts-ignore
   if (html.list.overlay.active.hasAttribute('open')) {
+    // @ts-ignore
     html.list.overlay.active.removeAttribute('open');
   } else {
+    // @ts-ignore
     const button = event.target.closest('.preview');
     if (button == null) {
       return;
     }
 
     const book = books.find((book) => book.id === button.id);
+    // @ts-ignore
     const year = new Date(book.published).getFullYear();
 
+    // @ts-ignore
     const { title, image, description, author: authorId } = book;
     const titleElement = html.list.overlay.title;
+    // @ts-ignore
     titleElement.innerText = title;
 
     const imageElement = document.querySelector('[data-list-image]');
+    // @ts-ignore
     imageElement.src = image;
 
     const blurElement = document.querySelector('[data-list-blur]');
+    // @ts-ignore
     blurElement.src = image;
 
     const descriptionElement = html.list.overlay.description;
+    // @ts-ignore
     descriptionElement.innerText = description;
 
     const subtitleElement = html.list.overlay.subtitle;
+    // @ts-ignore
     subtitleElement.innerText = `${authors[authorId]} (${year})`;
 
+    // @ts-ignore
     html.list.overlay.active.setAttribute('open', true);
   }
 });
@@ -125,14 +143,19 @@ document.addEventListener('click', (event) => {
  */
 const handleSearchToggle = (event) => {
   event.preventDefault();
+  // @ts-ignore
   if (html.search.dialog.hasAttribute('open')) {
+    // @ts-ignore
     html.search.dialog.removeAttribute('open');
   } else {
+    // @ts-ignore
     html.search.dialog.setAttribute('open', true);
   }
 };
 
+// @ts-ignore
 html.search.button.addEventListener('click', handleSearchToggle);
+// @ts-ignore
 html.search.cancel.addEventListener('click', handleSearchToggle);
 
 /**
@@ -140,14 +163,19 @@ html.search.cancel.addEventListener('click', handleSearchToggle);
  */
 const handleSettingsToggle = (event) => {
   event.preventDefault();
+  // @ts-ignore
   if (html.settings.dialog.hasAttribute('open')) {
+    // @ts-ignore
     html.settings.dialog.removeAttribute('open');
   } else {
+    // @ts-ignore
     html.settings.dialog.setAttribute('open', true);
   }
 };
 
+// @ts-ignore
 html.settings.button.addEventListener('click', handleSettingsToggle);
+// @ts-ignore
 html.settings.cancel.addEventListener('click', handleSettingsToggle);
 
 /**
@@ -156,6 +184,7 @@ html.settings.cancel.addEventListener('click', handleSettingsToggle);
  */
 const handleSettingsSave = (event) => {
   event.preventDefault();
+  // @ts-ignore
   if (html.settings.theme.value === 'night') {
     document.documentElement.style.setProperty('--color-dark', '255, 255, 255');
     document.documentElement.style.setProperty('--color-light', '10, 10, 20');
@@ -163,9 +192,11 @@ const handleSettingsSave = (event) => {
     document.documentElement.style.setProperty('--color-dark', '10, 10, 20');
     document.documentElement.style.setProperty('--color-light', '255, 255, 255');
   }
+  // @ts-ignore
   html.settings.dialog.removeAttribute('open');
 };
 
+// @ts-ignore
 html.settings.save.addEventListener('click', handleSettingsSave);
 
 /**
@@ -182,9 +213,11 @@ const createGenreOptionsHtml = (event) => {
     fragment.appendChild(option);
   }
 
+  // @ts-ignore
   html.search.genre.appendChild(fragment);
 };
 
+// @ts-ignore
 html.search.button.addEventListener('click', createGenreOptionsHtml);
 
 /**
@@ -201,9 +234,11 @@ const createAuthorOptionsHtml = (event) => {
     fragment.appendChild(option);
   }
 
+  // @ts-ignore
   html.search.author.appendChild(fragment);
 };
 
+// @ts-ignore
 html.search.author.addEventListener('click', createAuthorOptionsHtml);
 
 /**
@@ -212,8 +247,11 @@ html.search.author.addEventListener('click', createAuthorOptionsHtml);
 const handleSearchSubmit = (event) => {
   event.preventDefault();
   const search = {
+    // @ts-ignore
     title: html.search.title.value,
+    // @ts-ignore
     author: html.search.author.value,
+    // @ts-ignore
     genre: html.search.genre.value,
   };
 
@@ -242,13 +280,17 @@ const handleSearchSubmit = (event) => {
     }
   }
 
+  // @ts-ignore
   html.search.genre.value = 'All genres';
+  // @ts-ignore
   html.search.author.value = 'All authors';
+  // @ts-ignore
   html.search.title.value = '';
 
   return handleSearchResults(found[0]);
 };
 
+// @ts-ignore
 html.search.submit.addEventListener('click', handleSearchSubmit);
 
 /**
@@ -257,13 +299,18 @@ html.search.submit.addEventListener('click', handleSearchSubmit);
  */
 const handleSearchResults = (found) => {
   if (typeof found === 'undefined') {
+    // @ts-ignore
     html.search.dialog.removeAttribute('open');
     return;
   } else if (found.length === 0) {
+    // @ts-ignore
     area.innerHTML = '';
+    // @ts-ignore
     html.list.message.classList = 'list__message_show';
   } else {
+    // @ts-ignore
     html.list.message.classList = 'list__message';
+    // @ts-ignore
     area.innerHTML = '';
 
     for (let i = 0; i < found.length; i++) {
@@ -271,6 +318,7 @@ const handleSearchResults = (found) => {
       const { image, title, author: authorId, id } = book;
 
       const element = document.createElement('button');
+      // @ts-ignore
       element.classList = 'preview';
       element.setAttribute('id', id);
       element.innerHTML = /* html */ `
@@ -282,9 +330,11 @@ const handleSearchResults = (found) => {
       fragment.appendChild(element);
     }
 
+    // @ts-ignore
     area.appendChild(fragment);
   }
 
+  // @ts-ignore
   html.search.dialog.removeAttribute('open');
 };
 
