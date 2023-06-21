@@ -1,4 +1,47 @@
-import { BOOKS_PER_PAGE, authors, genres, books, html } from "./data.js";
+import { BOOKS_PER_PAGE, authors, genres, books } from "./data.js";
+
+//These are query selectors for each user story which makes the bookconnect works.
+const html = {
+  
+  settings: {
+    button: document.querySelector('[data-header-settings]'),
+    dialog: document.querySelector('[data-settings-overlay]'),
+    form: document.querySelector('[data-settings-form]'),
+    theme: document.querySelector('[data-settings-theme]'),
+    cancel: document.querySelector('[data-settings-cancel]'),
+    save: document.querySelector('[data-settings-save]')
+  },
+ 
+  search: {
+      button: document.querySelector('[data-header-search]'),
+      dialog: document.querySelector('[data-search-overlay]'),
+      cancel: document.querySelector('[data-search-cancel]'),
+      form: document.querySelector('[data-search-form]'),
+      title: document.querySelector('[data-search-title]'),
+      genre: document.querySelector('[data-search-genres]'),
+      author: document.querySelector('[data-search-authors]'),
+      submit: document.querySelector('[data-search-submit]')
+  },
+  
+  list: {
+    items: document.querySelector('[data-list-items]'),
+    message: document.querySelector('[data-list-message]'),
+    button: document.querySelector('[data-list-button]'),
+    preview: document.querySelectorAll('.preview'),
+    overlay: {
+      active: document.querySelector('[data-list-active]'),
+      blur: document.querySelector('[data-list-blur]'),
+      title: document.querySelector('[data-list-title]'),
+      subtitle: document.querySelector('[data-list-subtitle]'),
+      description: document.querySelector('[data-list-description]'),
+      close: document.querySelector('[data-list-close]'),
+      image: document.querySelectorAll('[data-list-image]')
+
+  }
+  },
+}
+
+
 
 // Variables with global scope to use across functions
 const fragment = document.createDocumentFragment();
@@ -244,3 +287,5 @@ const handleSearchResults = (found) => {
 
   html.search.dialog.removeAttribute('open');
 };
+
+
