@@ -7,17 +7,17 @@
 
     <title>Book Connect</title>
 
-    <link rel="apple-touch-icon" sizes="180x180" href="/book-connect-main/meta/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/book-connect-main/meta/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/meta/favicon-16x16.png">
-    <link rel="manifest" href="/book-connect-main/meta/manifest.json">
-    <link rel="mask-icon" href="/book-connect-main/meta/safari-pinned-tab.svg" color="#0096ff">
-    <link rel="shortcut icon" href="/book-connect-main/meta/safari-pinned-tab.svg">
+    <link rel="apple-touch-icon" sizes="180x180" href="/book-connect-main/book-connect-main/meta/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/book-connect-main/book-connect-main/meta/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/book-connect-main/book-connect-main/meta/favicon-16x16.png">
+    <link rel="manifest" href="/book-connect-main/book-connect-main/meta/manifest.json">
+    <link rel="mask-icon" href="/book-connect-main/book-connect-main/meta/safari-pinned-tab.svg" color="#0096ff">
+    <link rel="shortcut icon" href="/book-connect-main/book-connect-main/meta/apple-touch-icon.png">
     <meta name="msapplication-TileColor" content="#0a0a14">
-    <meta name="msapplication-config" content="/meta/browserconfig.xml">
+    <meta name="msapplication-config" content="./meta/browserconfig.xml">
     <meta name="theme-color" content="#0a0a14">
 
-    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="/book-connect-main/book-connect-main/css/styles.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
@@ -26,8 +26,8 @@
       rel="stylesheet"
     />
 
-    <script src="./scripts.js"></script>
-    <script src="./data.js"></script>
+    <script src="/book-connect-main/book-connect-main/scripts/data.js" defer type="module"></script>
+    <script src="/book-connect-main/book-connect-main/scripts/scripts.js" defer type="module"></script>
   </head>
   <body>
 
@@ -90,10 +90,10 @@
       </div>
     </header>
 
-    <main class="list">
+    <main class="list" data-list>
       <div class="list__items" data-list-items></div>
       <div class="list__message" data-list-message>No results found. Your filters might be too narrow.</div>
-      <button class="list__button" data-list-button></button>
+      <button class="list__button" data-list-button>Show More</button>
     </main>
 
 
@@ -116,24 +116,24 @@
         <form class="overlay__form" data-search-form id="search">
           <label class="overlay__field">
             <div class="overlay__label">Title</div>
-            <input class="overlay__input" data-search-title name="title" placeholder="Any"></input>
+            <input class="overlay__input" data-search-title name="title" placeholder="All"></input>
           </label>
 
           <label class="overlay__field">
             <div class="overlay__label">Genre</div>
-            <select class="overlay__input overlay__input_select" data-search-genres name="genre"></select>
+            <select class="overlay__input overlay__input_select" data-search-genres name="genre" ><option value="">All genres</option></select>
           </label>
 
           <label class="overlay__field">
             <div class="overlay__label">Author</div>
-            <select class="overlay__input overlay__input_select" data-search-authors name="author">
+            <select class="overlay__input overlay__input_select" data-search-authors name="author"><option value="">All authors</option>
             </select>
           </label>
         </form>
 
         <div class="overlay__row">
           <button class="overlay__button" data-search-cancel>Cancel</button>
-          <button class="overlay__button overlay__button_primary" type="submit" form="search">Search</button>
+          <button class="overlay__button overlay__button_primary" type="submit" form="search" data-search-submit>Search</button>
         </div>
       </div>
     </dialog>
@@ -153,7 +153,7 @@
 
         <div class="overlay__row">
           <button class="overlay__button" data-settings-cancel>Cancel</button>
-          <button class="overlay__button overlay__button_primary" type="submit" form="settings">Save</button>
+          <button class="overlay__button overlay__button_primary" type="submit" form="settings" data-settings-save>Save</button>
         </div>
       </div>
     </dialog>
