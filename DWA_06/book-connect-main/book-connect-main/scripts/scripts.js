@@ -35,7 +35,7 @@ import { BOOKS_PER_PAGE, authors, genres, books } from "./data.js";
  * @prop {ListOverlayElements} list.overlay - The elements of book preview overlay.
  */
 
-/** @type {HTMLSections} */
+/** @type {HTMLSections} */ `html`
 const html = {
   settings: {
     button: document.querySelector('[data-header-settings]'),
