@@ -1,6 +1,5 @@
 import {
-  books, genres, authors, BOOKS_PER_PAGE,
-} from './data.js';
+  books, genres, authors } from './data.js';
 
 /** DOM ELEMENT FUNCTIONS
 
@@ -31,7 +30,7 @@ export const data = {
   home: {
     root: document.documentElement,
     main: getHtml('[data-list-items]'),
-    showMoreBtn: getHtml('[data-list-button'),
+    showMoreBtn: getHtml('[data-list-button]'),
     logoText: getHtml('.header__logo'),
     search: getHtml('[data-header-search]'),
     themeBtn: getHtml('[data-header-settings]'),
@@ -61,130 +60,27 @@ const FRAGMENT = document.createDocumentFragment();
  * This handler shows the book description overlay when the book is clicked on
  * @param event
  */
-export const descriptionOverlay = (event) => {
-  event.preventDefault();
-  const book = event.target.closest('.preview');
-  const bookId = book.getAttribute('data-preview');
+export const descriptionOverlay = (button) => {
+//create summary html
+document.querySelector('[data-list-active]').innerHTML = /* html */
+  `<div class="overlay__preview">
+  <img class="overlay__blur" data-list-blur="" src="${button.image}">
+  <img class="overlay__image" data-list-image="" src="${button.image}">
+  </div>
+  <div class="overlay__content">
+  <h3 class="overlay__title" data-list-title="">${button.title} (${new Date(button.published).getFullYear()})</h3>
+  <div class="overlay__data" data-list-subtitle="">${authors[button.author]}</div>
+  <p class="overlay__data overlay__data_secondary" data-list-description="">${button.description}</p>
+  </div>
+  <div class="overlay__row">
+  <button class="overlay__button overlay__button_primary" data-list-close="">Close</button>
+  </div>`;
 
-  books.forEach((book) => {
-    if (book.id === bookId) {
-      BOOK_SUMMARY.innerHTML = /* html */
-        `<div class="overlay__preview">
-        <img class="overlay__blur" data-list-blur="" src="${book.image}">
-        <img class="overlay__image" data-list-image="" src="${book.image}">
-        </div>
-        <div class="overlay__content">
-        <h3 class="overlay__title" data-list-title="">${book.title} (${new Date(book.published).getFullYear()})</h3>
-        <div class="overlay__data" data-list-subtitle="">${authors[book.author]}</div>
-        <p class="overlay__data overlay__data_secondary" data-list-description="">${book.description}</p>
-        </div>
-        <div class="overlay__row">
-        <button class="overlay__button overlay__button_primary" data-list-close="">Close</button>
-        </div>`;
-    }
-  });
-
+//show the modal on the page
   BOOK_SUMMARY.showModal();
-
+//close the modal when the close button is clicked.
   getHtml('[data-list-close]').addEventListener('click', () => {
     BOOK_SUMMARY.close();
-  });
-};
-
-// DISPLAY
-
- /** 
- * @typedef {object} Div
- */
-/**
- * This creates the button element then loads the book information
- * before displaying it on the html page.
- *
- * @param {Array} book
- * @returns {Div} FRAGMENT
- */
-const createBookButtons = (book) => {
-  /* create a button element for the books so each book is
-    in its own card */
-  const button = document.createElement('button');
-  // create a class and call it preview
-  button.classList.add('preview');
-  // Set the button's data-preview attribute to the book's id.
-  button.dataset.preview = book.id;
-  // Set the button's inner HTML to the book's title and author.
-  // eslint-disable-next-line operator-linebreak
-  button.innerHTML = /* HTML markup for the book cards */
-    `
-	 <img class="preview__image" src="${book.image}" />
-	 <div class="preview__info">
-	   <h3 class="preview__title">${book.title}</h3>
-	   <div class="preview__author">${authors[book.author]}</div>
-	 </div>
-   `;
-  // Append the button to the FRAGMENT.
-  FRAGMENT.appendChild(button);
-  return FRAGMENT;
-};
-
-/**
- * This function updates the number of books left and then prints
- * that number on the button used to show more books.
- * @returns {Number} - booksLeft is the number of books left that haven't been
- * loaded to the page
- */
-export const updateBooksLeft = () => {
-  const booksOnPage = getHtmlArray('.preview');
-  const booksOnPageCount = booksOnPage.length;
-  const booksLeft = books.length - booksOnPageCount;
-  return { booksLeft, booksOnPageCount };
-};
-
-/**
- * This function loads the home page of the website with
- * the books shown in a list of 36 at a time.
- * @param {object} books
- */
-export const appendBooks = (books) => {
-  books.slice(0, BOOKS_PER_PAGE).forEach((book) => {
-    createBookButtons(book);
-  });
-  // Append the fragment to the data-list-items div.
-  HOME_PAGE.appendChild(FRAGMENT);
-  SHOW_MORE_BTN.disabled = false;
-  SHOW_MORE_BTN.innerHTML = `Show more <span class = "list__remaining">(${updateBooksLeft().booksLeft})</span>`;
-  /* make the summary overlay show when a book is clicked */
-  const bookList = getHtmlArray('.preview');
-  // eslint-disable-next-line no-restricted-syntax
-  for (const singleBook of bookList) {
-    singleBook.addEventListener('click', descriptionOverlay);
-  }
-};
-
-/**
-   * This function will add more books to the page and update
-   * the number in the show more button everytime it is clicked
-   * until there are no more books left in the books object.
-   *@param { Event } event
-   */
-export const showMoreAction = (event) => {
-  event.preventDefault();
-  const { booksLeft, booksOnPageCount } = updateBooksLeft();
-  if (booksLeft > 36) {
-    books.slice(booksOnPageCount, booksOnPageCount + 36).forEach((book) => {
-      createBookButtons(book);
-    });
-  } else {
-    books.slice(booksOnPageCount).forEach((book) => {
-      createBookButtons(book);
-    });
-    SHOW_MORE_BTN.disabled = true;
-  }
-  HOME_PAGE.appendChild(FRAGMENT);
-  SHOW_MORE_BTN.innerHTML = `Show more <span class="list__remaining">(${updateBooksLeft().booksLeft})</span>`;
-  const booksOnPage = getHtmlArray('.preview');
-  booksOnPage.forEach((book) => {
-    // eslint-disable-next-line no-use-before-define
-    book.addEventListener('click', descriptionOverlay);
   });
 };
 
@@ -294,7 +190,6 @@ export const searchBooks = (event) => {
 /** TOGGLE LIGHT/DARK MODE
  * This variable is the dialog box for the light/dark toggle overlay
  */
-
 export const lightToggleDialog = getHtml('[data-settings-overlay]');
 
 lightToggleDialog.innerHTML = /* html */

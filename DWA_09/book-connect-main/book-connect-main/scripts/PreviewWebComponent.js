@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import { books, genres, authors, BOOKS_PER_PAGE } from './data.js';
 
 import { descriptionOverlay } from './functions.js';
