@@ -25412,3 +25412,72 @@ export const books = [
   }
 ]
 
+/**
+ * @typedef {object} HTMLSelectors
+ * @prop {HTMLButtonElement} button - The HTML button element.
+ * @prop {HTMLDivElement} dialog - The HTML div element representing a dialog.
+ * @prop {HTMLFormElement} form - The HTML form element.
+ * @prop {HTMLSelectElement} theme - The HTML select element for theme selection.
+ * @prop {HTMLButtonElement} cancel - The HTML button element for cancel action.
+ * @prop {HTMLButtonElement} save - The HTML button element for save action.
+ */
+
+/**
+ * @typedef {object} ListOverlayElements
+ * @prop {HTMLElement} active - The active overlay element.
+ * @prop {HTMLImageElement} blur - The HTML image element representing blur effect.
+ * @prop {HTMLHeadingElement} title - The HTML heading element for book title.
+ * @prop {HTMLParagraphElement} subtitle - The HTML paragraph element for book subtitle.
+ * @prop {HTMLDivElement} description - The HTML div element for book description.
+ * @prop {HTMLButtonElement} close - The HTML button element for closing the overlay.
+ * @prop {NodeListOf<HTMLImageElement>} image - The HTML image elements representing book images.
+ */
+
+/**
+ * @typedef {object} HTMLSections
+ * @prop {HTMLSelectors} settings - The settings section HTML selectors.
+ * @prop {HTMLSelectors} search - The search section HTML selectors.
+ * @prop {object} list - The list section HTML selectors.
+ * @prop {HTMLUListElement} list.items - The HTML ul element for list items.
+ * @prop {HTMLDivElement} list.message - The HTML div element for list message.
+ * @prop {HTMLButtonElement} list.button - The HTML button element for show more action.
+ * @prop {NodeListOf<HTMLButtonElement>} list.preview - The HTML button elements for book preview.
+ * @prop {ListOverlayElements} list.overlay - The elements of book preview overlay.
+ */
+
+/** @type {HTMLSections} */ `html`
+const html = {
+  settings: {
+    button: document.querySelector('[data-header-settings]'),
+    dialog: document.querySelector('[data-settings-overlay]'),
+    form: document.querySelector('[data-settings-form]'),
+    theme: document.querySelector('[data-settings-theme]'),
+    cancel: document.querySelector('[data-settings-cancel]'),
+    save: document.querySelector('[data-settings-save]')
+  },
+  search: {
+    button: document.querySelector('[data-header-search]'),
+    dialog: document.querySelector('[data-search-overlay]'),
+    cancel: document.querySelector('[data-search-cancel]'),
+    form: document.querySelector('[data-search-form]'),
+    title: document.querySelector('[data-search-title]'),
+    genre: document.querySelector('[data-search-genres]'),
+    author: document.querySelector('[data-search-authors]'),
+    submit: document.querySelector('[data-search-submit]')
+  },
+  list: {
+    items: document.querySelector('[data-list-items]'),
+    message: document.querySelector('[data-list-message]'),
+    button: document.querySelector('[data-list-button]'),
+    preview: document.querySelectorAll('.preview'),
+    overlay: {
+      active: document.querySelector('[data-list-active]'),
+      blur: document.querySelector('[data-list-blur]'),
+      title: document.querySelector('[data-list-title]'),
+      subtitle: document.querySelector('[data-list-subtitle]'),
+      description: document.querySelector('[data-list-description]'),
+      close: document.querySelector('[data-list-close]'),
+      image: document.querySelectorAll('[data-list-image]')
+    }
+  }
+};

@@ -1,76 +1,4 @@
-// @ts-nocheck
-
-import { BOOKS_PER_PAGE, authors, genres, books } from "./data.js";
-
-/**
- * @typedef {object} HTMLSelectors
- * @prop {HTMLButtonElement} button - The HTML button element.
- * @prop {HTMLDivElement} dialog - The HTML div element representing a dialog.
- * @prop {HTMLFormElement} form - The HTML form element.
- * @prop {HTMLSelectElement} theme - The HTML select element for theme selection.
- * @prop {HTMLButtonElement} cancel - The HTML button element for cancel action.
- * @prop {HTMLButtonElement} save - The HTML button element for save action.
- */
-
-/**
- * @typedef {object} ListOverlayElements
- * @prop {HTMLElement} active - The active overlay element.
- * @prop {HTMLImageElement} blur - The HTML image element representing blur effect.
- * @prop {HTMLHeadingElement} title - The HTML heading element for book title.
- * @prop {HTMLParagraphElement} subtitle - The HTML paragraph element for book subtitle.
- * @prop {HTMLDivElement} description - The HTML div element for book description.
- * @prop {HTMLButtonElement} close - The HTML button element for closing the overlay.
- * @prop {NodeListOf<HTMLImageElement>} image - The HTML image elements representing book images.
- */
-
-/**
- * @typedef {object} HTMLSections
- * @prop {HTMLSelectors} settings - The settings section HTML selectors.
- * @prop {HTMLSelectors} search - The search section HTML selectors.
- * @prop {object} list - The list section HTML selectors.
- * @prop {HTMLUListElement} list.items - The HTML ul element for list items.
- * @prop {HTMLDivElement} list.message - The HTML div element for list message.
- * @prop {HTMLButtonElement} list.button - The HTML button element for show more action.
- * @prop {NodeListOf<HTMLButtonElement>} list.preview - The HTML button elements for book preview.
- * @prop {ListOverlayElements} list.overlay - The elements of book preview overlay.
- */
-
-/** @type {HTMLSections} */ `html`
-const html = {
-  settings: {
-    button: document.querySelector('[data-header-settings]'),
-    dialog: document.querySelector('[data-settings-overlay]'),
-    form: document.querySelector('[data-settings-form]'),
-    theme: document.querySelector('[data-settings-theme]'),
-    cancel: document.querySelector('[data-settings-cancel]'),
-    save: document.querySelector('[data-settings-save]')
-  },
-  search: {
-    button: document.querySelector('[data-header-search]'),
-    dialog: document.querySelector('[data-search-overlay]'),
-    cancel: document.querySelector('[data-search-cancel]'),
-    form: document.querySelector('[data-search-form]'),
-    title: document.querySelector('[data-search-title]'),
-    genre: document.querySelector('[data-search-genres]'),
-    author: document.querySelector('[data-search-authors]'),
-    submit: document.querySelector('[data-search-submit]')
-  },
-  list: {
-    items: document.querySelector('[data-list-items]'),
-    message: document.querySelector('[data-list-message]'),
-    button: document.querySelector('[data-list-button]'),
-    preview: document.querySelectorAll('.preview'),
-    overlay: {
-      active: document.querySelector('[data-list-active]'),
-      blur: document.querySelector('[data-list-blur]'),
-      title: document.querySelector('[data-list-title]'),
-      subtitle: document.querySelector('[data-list-subtitle]'),
-      description: document.querySelector('[data-list-description]'),
-      close: document.querySelector('[data-list-close]'),
-      image: document.querySelectorAll('[data-list-image]')
-    }
-  }
-};
+import { BOOKS_PER_PAGE, authors, genres, books, html } from "./data.js";
 
 /** @type {DocumentFragment} */
 const fragment = document.createDocumentFragment();
@@ -291,8 +219,8 @@ const handleSearchSubmit = (event) => {
     }
   }
 
-  html.search.genre.value = 'All genres';
-  html.search.author.value = 'All authors';
+  html.search.genre.value = 'all genres';
+  html.search.author.value = 'all authors';
   html.search.title.value = '';
 
   return handleSearchResults(found[0]);
@@ -307,16 +235,18 @@ html.search.submit.addEventListener('click', handleSearchSubmit);
  * @param {Array} found - Array of found books.
  */
 const handleSearchResults = (found) => {
-  if (typeof found === 'undefined') {
-    html.search.dialog.removeAttribute('open');
-    return;
-  } else if (found.length === 0) {
-    area.innerHTML = '';
-    html.list.message.classList = 'list__message_show';
+  area.innerHTML = '';
+  index = 0;
+
+  if (found.length === 0) {
+    html.list.message.classList = 'list__message list__message--error';
+    html.list.message.textContent = 'No results found.';
   } else {
-    html.search.dialog.removeAttribute('open');
-    area.innerHTML = '';
-    found.forEach((book) => {
+    html.list.message.classList = 'list__message';
+    html.list.button.textContent = `Show More (${found.length - index})`;
+
+    for (let i = 0; i < found.length; i++) {
+      const book = found[i];
       const { image, title, author: authorId, id } = book;
 
       const element = document.createElement('button');
@@ -330,8 +260,9 @@ const handleSearchResults = (found) => {
         </div>`;
 
       fragment.appendChild(element);
-    });
+    }
 
     area.appendChild(fragment);
+    index += found.length;
   }
 };
