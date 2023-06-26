@@ -1,3 +1,66 @@
+/* STATE MANAGEMENT CODE */
+
+/**
+ * Creates a Redux-inspired store.
+ * @param {Function} reducer - The reducer function to handle state updates.
+ * @returns {object} An object with methods for getting the current state and dispatching actions.
+ */
+const store = (reducer) => {
+  let state;
+  let handlers = [];
+
+  /**
+   * Retrieves the current state of the store.
+   * @returns {*} The current state.
+   */
+  const fetchState = () => state;
+
+  /**
+   * Dispatches an action to update the state.
+   * @param {object} action - The action object containing the type and payload.
+   */
+  const publish = (action) => {
+    state = reducer(state, action);
+    handlers.unshift(state);
+    console.log(handlers);
+  };
+
+  /**
+   * Retrieves the current state of the store.
+   * @returns {*} The current state.
+   */
+  const getState = () => fetchState();
+
+  return {
+    getState,
+    publish
+  };
+};
+
+/**
+ * Reducer function to handle state updates based on actions.
+ * @param {*} state - The current state.
+ * @param {object} action - The action object containing the type and payload.
+ * @returns {*} The updated state.
+ */
+const reducer = (state = 0, action) => {
+  switch (action.type) {
+    case 'ADD':
+      return state + 1;
+    case 'MINUS':
+      return state - 1;
+    case 'RESET':
+      return (state = 0);
+    default:
+      return state;
+  }
+};
+
+/**
+ * The store instance for managing the state.
+ */
+const myStore = store(reducer);
+
 /**
  * The maximum value allowed for the counter.
  * @constant {number}
@@ -88,65 +151,3 @@ subtract.addEventListener('click', subtractHandler);
 add.addEventListener('click', addHandler);
 reset.addEventListener('click', resetHandler);
 
-/* STATE MANAGEMENT CODE */
-
-/**
- * Creates a Redux-inspired store.
- * @param {Function} reducer - The reducer function to handle state updates.
- * @returns {object} An object with methods for getting the current state and dispatching actions.
- */
-const store = (reducer) => {
-  let state;
-  let handlers = [];
-
-  /**
-   * Retrieves the current state of the store.
-   * @returns {*} The current state.
-   */
-  const fetchState = () => state;
-
-  /**
-   * Dispatches an action to update the state.
-   * @param {object} action - The action object containing the type and payload.
-   */
-  const publish = (action) => {
-    state = reducer(state, action);
-    handlers.unshift(state);
-    console.log(handlers);
-  };
-
-  /**
-   * Retrieves the current state of the store.
-   * @returns {*} The current state.
-   */
-  const getState = () => fetchState();
-
-  return {
-    getState,
-    publish
-  };
-};
-
-/**
- * Reducer function to handle state updates based on actions.
- * @param {*} state - The current state.
- * @param {object} action - The action object containing the type and payload.
- * @returns {*} The updated state.
- */
-const reducer = (state = 0, action) => {
-  switch (action.type) {
-    case 'ADD':
-      return state + 1;
-    case 'MINUS':
-      return state - 1;
-    case 'RESET':
-      return (state = 0);
-    default:
-      return state;
-  }
-};
-
-/**
- * The store instance for managing the state.
- */
-const myStore = store(reducer);
