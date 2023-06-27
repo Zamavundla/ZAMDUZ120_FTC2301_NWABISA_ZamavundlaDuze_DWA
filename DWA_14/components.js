@@ -1,93 +1,127 @@
-import { LitElement, html, css } from 'https://cdn.jsdelivr.net/gh/lit/dist@2/core/lit-core.min.js';
+// components.js
 
-class CounterComponent extends LitElement {
+// JavaScript code for defining the custom web components
+
+// Import necessary modules from Lit
+import { html, css, LitElement } from 'https://cdn.jsdelivr.net/gh/lit/dist@2/core/lit-core.min.js';
+
+// Define the TallyHeader component
+class TallyHeader extends LitElement {
   static styles = css`
-    :host {
-      display: block;
-    }
-
-    .counter-container {
-      display: flex;
-      align-items: center;
-    }
-
-    .counter-input {
-      width: 50px;
+    /* Styles for the TallyHeader component */
+    header {
+      background-color: #4285f4;
+      color: white;
+      padding: 1rem;
       text-align: center;
-    }
-
-    .counter-buttons {
-      display: flex;
-      gap: 8px;
     }
   `;
 
-  static properties = {
-    counterValue: { type: Number },
-    counterState: { type: String },
-  };
-
-  constructor() {
-    super();
-    // Initial state of the counter
-    this.counterValue = 0;
-    this.counterState = 'Normal';
-  }
-
-  subtract() {
-    // Subtract button click handler
-    if (this.counterValue > MIN_NUMBER) {
-      // Check if counter value is greater than the minimum value
-      this.counterValue -= 1; // Decrement the counter value
-      if (this.counterValue === MIN_NUMBER) {
-        // Check if the counter value has reached the minimum
-        this.counterState = 'Minimum Reached'; // Update counter state
-      } else {
-        this.counterState = 'Normal'; // Update counter state
-      }
-    }
-  }
-
-  add() {
-    // Add button click handler
-    if (this.counterValue < MAX_NUMBER) {
-      // Check if counter value is less than the maximum value
-      this.counterValue += 1; // Increment the counter value
-      if (this.counterValue === MAX_NUMBER) {
-        // Check if the counter value has reached the maximum
-        this.counterState = 'Maximum Reached'; // Update counter state
-      } else {
-        this.counterState = 'Normal'; // Update counter state
-      }
-    }
-  }
-
-  reset() {
-    // Reset button click handler
-    this.counterValue = 0; // Reset the counter value
-    this.counterState = 'Normal'; // Reset counter state
-  }
-
   render() {
     return html`
-      <div class="counter-container">
-        <input
-          class="counter-input"
-          type="number"
-          .value=${this.counterValue}
-          disabled
-        />
-        <div class="counter-buttons">
-          <button @click=${this.subtract} ?disabled=${this.counterValue <= MIN_NUMBER}>-</button>
-          <button @click=${this.add} ?disabled=${this.counterValue >= MAX_NUMBER}>+</button>
-          <button @click=${this.reset}>Reset</button>
-        </div>
-      </div>
-      <div id="reset-message" ?hidden=${this.counterState !== 'Normal'}>
-        Counter reset!
-      </div>
+      <!-- HTML template for the TallyHeader component -->
+      <header>
+        <h1>Tally Counter</h1>
+      </header>
     `;
   }
 }
+customElements.define('tally-header', TallyHeader);
 
-customElements.define('counter-component', CounterComponent);
+// Define the PlusButton component
+class PlusButton extends LitElement {
+  static styles = css`
+    /* Styles for the PlusButton component */
+    button {
+      background-color: #64b5f6;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+  `;
+
+  render() {
+    return html`
+      <!-- HTML template for the PlusButton component -->
+      <button>
+        +
+      </button>
+    `;
+  }
+}
+customElements.define('plus-button', PlusButton);
+
+// Define the MinusButton component
+class MinusButton extends LitElement {
+  static styles = css`
+    /* Styles for the MinusButton component */
+    button {
+      background-color: #64b5f6;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+  `;
+
+  render() {
+    return html`
+      <!-- HTML template for the MinusButton component -->
+      <button>
+        -
+      </button>
+    `;
+  }
+}
+customElements.define('minus-button', MinusButton);
+
+// Define the ResetButton component
+class ResetButton extends LitElement {
+  static styles = css`
+    /* Styles for the ResetButton component */
+    button {
+      background-color: #e91e63;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+  `;
+
+  render() {
+    return html`
+      <!-- HTML template for the ResetButton component -->
+      <button>
+        Reset
+      </button>
+    `;
+  }
+}
+customElements.define('reset-button', ResetButton);
+
+// Define the FooterElement component
+class FooterElement extends LitElement {
+  static styles = css`
+    /* Styles for the FooterElement component */
+    footer {
+      background-color: #4285f4;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+  `;
+
+  render() {
+    return html`
+      <!-- HTML template for the FooterElement component -->
+      <footer>
+        <p>© 2023 Tally Counter. All rights reserved.</p>
+      </footer>
+    `;
+  }
+}
+customElements.define('footer-element', FooterElement);
