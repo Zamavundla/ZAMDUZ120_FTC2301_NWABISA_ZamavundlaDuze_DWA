@@ -11,5 +11,8 @@
   "license": "ISC",
   "devDependencies": {
     "jsdoc": "^4.0.2"
+  },
+  "dependencies": {
+    "@shoelace-style/shoelace": "^2.5.2"
   }
 }
