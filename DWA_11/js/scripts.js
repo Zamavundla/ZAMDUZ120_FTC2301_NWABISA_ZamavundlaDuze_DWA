@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 // GLOBAL CONSTANTS
 const MAX_NUMBER = 10;
 const MIN_NUMBER = -10;
