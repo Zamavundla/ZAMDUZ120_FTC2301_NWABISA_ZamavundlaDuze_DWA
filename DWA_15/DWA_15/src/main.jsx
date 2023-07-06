@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* Surprise! You probably thought you could just forget
 the line of code you just learned! Nope, not on my watch!
 
