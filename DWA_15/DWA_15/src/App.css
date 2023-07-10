@@ -11,16 +11,24 @@ nav {
   padding: 30px 25px;
 }
 
-nav > h3, nav > h4 {
+.nav--logo_text, .nav--title {
   margin: 0;
   color: antiquewhite;
 }
 
-nav > h3 {
+.nav--logo_text {
   margin-right: auto;
+  color: #61DAFB;
+  font-weight: 700;
+  font-size: 22px;
 }
 
-nav > img {
+.nav--title {
+  color: #DEEBF8;
+  font-weight: 600;
+}
+
+.nav--icon {
   height: 30px;
   margin-right: 7px;
 }
