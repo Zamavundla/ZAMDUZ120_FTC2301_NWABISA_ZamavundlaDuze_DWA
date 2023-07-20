@@ -1,54 +1,65 @@
+/* Box-sizing property to include padding and borders in the element's total width and height */
 * {
     box-sizing: border-box;
-}
-
-body {
+  }
+  
+  /* Set default font family and remove body margin */
+  body {
     font-family: "Karla", sans-serif;
     margin: 0;
-}
-
-main {
+  }
+  
+  /* Main content padding */
+  main {
     padding: 36px;
-}
-
-
-.header {
+  }
+  
+  /* Header styling */
+  .header {
     display: flex;
     align-items: center;
-    height: 100px;
+    height: 65px;
     background: linear-gradient(90deg, #672280 1.18%, #A626D3 100%);
     color: white;
-    padding: 25px 20px
-}
-.header--image {
-    height: 198%;
+    padding: 20px;
+  }
+  
+  /* Header image style */
+  .header--image {
+    height: 100%;
     margin-right: 6px;
-}
-
-.header--title {
+  }
+  
+  /* Header title style */
+  .header--title {
     font-size: 1.25rem;
     margin-right: auto;
-}
-
-.header--project {
+  }
+  
+  /* Header project style */
+  .header--project {
     font-size: 0.75rem;
     font-weight: 500;
-}
-
-.form {
+  }
+  
+  /* Form styling using grid layout */
+  .form {
     display: grid;
     grid-template: 40px 40px / 1fr 1fr;
     gap: 17px;
-}
-
-.form--input {
+    margin-bottom: 17px;
+  }
+  
+  /* Form input style */
+  .form--input {
     font-family: "Karla", sans-serif;
     border-radius: 5px;
     border: 1px solid #D5D4D8;
-    text-indent: 15px;
-}
-
-.form--button {
+    text-indent: 5px;
+  }
+  
+  /* Form button style */
+  .form--button {
     grid-column: 1 / -1;
     font-family: "Karla", sans-serif;
     border-radius: 5px;
@@ -56,9 +67,43 @@ main {
     color: white;
     border: none;
     cursor: pointer;
-
-}
- .meme--image{
+  }
+  
+  /* Meme container */
+  .meme {
+    position: relative;
+    text-align: center; /* Center the meme--text horizontally */
+  }
+  
+  /* Meme image style */
+  .meme--image {
     max-width: 100%;
-    
- }
+    border-radius: 3px;
+  }
+  
+  /* Meme text style (top and bottom) */
+  .meme--text {
+    position: absolute;
+    width: 80%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 15px 0;
+    padding: 0 5px;
+    font-family: impact, sans-serif;
+    font-size: 2em;
+    text-transform: uppercase;
+    color: white;
+    letter-spacing: 1px;
+    text-shadow: 2px 2px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 0 2px 0 #000, 2px 0 0 #000, 0 -2px 0 #000, -2px 0 0 #000, 2px 2px 5px #000;
+  }
+  
+  /* Meme text at the bottom */
+  .bottom {
+    bottom: 0;
+  }
+  
+  /* Meme text at the top */
+  .top {
+    top: 0;
+  }
+  
