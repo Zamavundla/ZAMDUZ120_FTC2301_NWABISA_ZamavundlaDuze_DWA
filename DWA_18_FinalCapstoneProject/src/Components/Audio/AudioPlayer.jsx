@@ -2,7 +2,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { PlayerContext } from '../contexts/PlayerContext';
 
 export default function AudioPlayer({ audioSrc }) {
   const [isPlaying, setIsPlaying] = useState(false);

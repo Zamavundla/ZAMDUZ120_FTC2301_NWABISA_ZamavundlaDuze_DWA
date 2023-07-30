@@ -1,14 +1,18 @@
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { fetchEpisodeById } from '../Components/BrowseAllCard';
+import { fetchEpisodeById } from '../Homepage/BrowseAllCard';
+import supabase from '../Toggle/Supabase';
+import { UserContext } from '../Contexts/UserContext';
 
-const EpisodePage = () => {
+export default function EpisodePage() {
   const { episodeId } = useParams();
   const [episode, setEpisode] = useState(null);
   const [audioRef, setAudioRef] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
+  const { user } = useContext(UserContext);
+  const [isFavorite, setIsFavorite] = useState(false); // Track whether the episode is in user's favorites
 
   useEffect(() => {
     const fetchData = async () => {
@@ -24,6 +28,30 @@ const EpisodePage = () => {
     }
   }, [isPlaying, audioRef]);
 
+  useEffect(() => {
+    if (user) {
+      // Function to check if the episode is in user's favorites
+      const checkIsFavorite = async () => {
+        try {
+          const { data } = await supabase
+            .from('favorites')
+            .select()
+            .eq('user_id', user.id)
+            .eq('episode_id', episodeId);
+
+          if (data && data.length > 0) {
+            setIsFavorite(true);
+          } else {
+            setIsFavorite(false);
+          }
+        } catch (error) {
+          console.error('Error checking favorite:', error.message);
+        }
+      };
+
+      checkIsFavorite();
+    }
+  }, [user, episodeId]);
   const handlePlayPause = () => {
     setIsPlaying((prevState) => !prevState);
   };
@@ -36,6 +64,26 @@ const EpisodePage = () => {
     const seekTime = parseFloat(event.target.value);
     setCurrentTime(seekTime);
     audioRef.currentTime = seekTime;
+  };
+
+  const handleToggleFavorite = async () => {
+    if (user) {
+      try {
+        // If the episode is already a favorite, remove it from favorites
+        if (isFavorite) {
+          await supabase.from('favorites').delete().eq('user_id', user.id).eq('episode_id', episodeId);
+          setIsFavorite(false);
+        } else {
+          // If the episode is not a favorite, add it to favorites
+          await supabase.from('favorites').insert([{ user_id: user.id, episode_id: episodeId }]);
+          setIsFavorite(true);
+        }
+      } catch (error) {
+        console.error('Error toggling favorite:', error.message);
+      }
+    } else {
+      // Prompt the user to log in before adding to favorites
+    }
   };
 
   if (!episode) {
@@ -60,11 +108,15 @@ const EpisodePage = () => {
         <input type="range" min={0} max={episode.duration} step={0.1} value={currentTime} onChange={handleSeek} />
         <span>{formatTimestamp(currentTime)}</span> / <span>{formatTimestamp(episode.duration)}</span>
       </div>
+      {/* Button to toggle favorite status */}
+      {user && (
+        <button onClick={handleToggleFavorite}>
+          {isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}
+        </button>
+      )}
     </div>
   );
-};
-
-export default EpisodePage;
+}
 
 // Helper function to format timestamp in seconds to MM:SS format
 const formatTimestamp = (time) => {
@@ -72,3 +124,5 @@ const formatTimestamp = (time) => {
   const seconds = Math.floor(time % 60);
   return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 };
+
+

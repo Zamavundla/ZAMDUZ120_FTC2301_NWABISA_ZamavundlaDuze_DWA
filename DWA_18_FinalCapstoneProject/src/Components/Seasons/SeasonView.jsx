@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { useHistory} from 'react-router-dom';
 import PropTypes from 'prop-types'; 
-import AudioPlayer from './AudioPlayer';
+import AudioPlayer from '../Audio/AudioPlayer';
 
 export default function SeasonView({ episodes }) {
   const history = useHistory();

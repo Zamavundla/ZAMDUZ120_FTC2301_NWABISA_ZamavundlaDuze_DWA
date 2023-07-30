@@ -1,10 +1,10 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { fetchShowById } from '../Components/BrowseAllCards'; 
-import SeasonSelector from '../Components/SeasonSelector';
-import SeasonView from '../Components/SeasonView';
-import AudioSelector from '../Components/AudioPlayer'; 
+import { fetchShowById } from '../Homepage/BrowseAllCard'; 
+import SeasonSelector from '../Seasons/SeasonSelector';
+import SeasonView from '../Seasons/SeasonView';
+import AudioSelector from '../Audio/AudioPlayer'; 
 
 export default function ShowDetailsPage() {
   const { showId } = useParams();

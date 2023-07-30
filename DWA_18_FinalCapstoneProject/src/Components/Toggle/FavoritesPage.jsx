@@ -1,12 +1,28 @@
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { fetchEpisodeById, fetchShowById } from '../Components/BrowseAllCard';
+import { fetchEpisodeById, fetchShowById } from '../Homepage/BrowseAllCard';
+import supabase from './Supabase';
+import { UserContext } from './UserContext';
 
 export default function FavoritesPage() {
   const [favorites, setFavorites] = useState([]);
   const [favoriteEpisodes, setFavoriteEpisodes] = useState([]);
   const [sortOrder, setSortOrder] = useState('asc');
+
+  const { user } = useContext(UserContext); 
+
+  useEffect(() => {
+    const fetchFavorites = async () => {
+      if (user) {
+        const { data, error } = await supabase.from('favorites').select('*').eq('user_id', user.id);
+        if (!error) {
+          setFavorites(data.map((favorite) => favorite.episode_id));
+        }
+      }
+    };
+    fetchFavorites();
+  }, [user]);
 
   useEffect(() => {
     const storedFavorites = localStorage.getItem('favorites');
