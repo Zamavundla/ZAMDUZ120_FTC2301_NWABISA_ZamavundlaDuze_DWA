@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { fetchShowById } from '../Homepage/BrowseAllCard'; 
+import { fetchShowById } from './BrowseAllCards'; 
 import SeasonSelector from '../Seasons/SeasonSelector';
 import SeasonView from '../Seasons/SeasonView';
 import AudioSelector from '../Audio/AudioPlayer'; 

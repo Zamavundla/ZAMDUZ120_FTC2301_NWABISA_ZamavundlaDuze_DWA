@@ -1,46 +1,45 @@
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useState, useCallback, useContext } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { fetchEpisodeById, fetchShowById } from '../Homepage/BrowseAllCard';
-import supabase from './Supabase';
-import { UserContext } from './UserContext';
+import { fetchEpisodeById, fetchShowById } from '../Homepage/BrowseAllCards';
+import supabase from '../Toggle/Supabase';
+import { UserContext } from './Contexts/UserContext';
 
-export default function FavoritesPage() {
+export default function FavoritesPage () {
   const [favorites, setFavorites] = useState([]);
   const [favoriteEpisodes, setFavoriteEpisodes] = useState([]);
   const [sortOrder, setSortOrder] = useState('asc');
-
+  
   const { user } = useContext(UserContext); 
 
   useEffect(() => {
     const fetchFavorites = async () => {
       if (user) {
-        const { data, error } = await supabase.from('favorites').select('*').eq('user_id', user.id);
+        let { data, error } = await supabase.from('favorites').select('*').eq('user_id', user.id);
         if (!error) {
-          setFavorites(data.map((favorite) => favorite.episode_id));
+          data = data.map((favorite) => ({ ...favorite, favoriteDate: new Date(favorite.created_at) }));
+          if (sortOrder === 'asc') {
+            data.sort((a, b) => a.showTitle.localeCompare(b.showTitle));
+          } else if (sortOrder === 'desc') {
+            data.sort((a, b) => b.showTitle.localeCompare(a.showTitle));
+          }
+          setFavorites(data);
         }
       }
     };
     fetchFavorites();
-  }, [user]);
-
-  useEffect(() => {
-    const storedFavorites = localStorage.getItem('favorites');
-    if (storedFavorites) {
-      setFavorites(JSON.parse(storedFavorites));
-    }
-  }, []);
-
+  }, [user, sortOrder]);
+  
   useEffect(() => {
     const fetchData = async () => {
-      const episodes = await Promise.all(favorites.map((episodeId) => fetchEpisodeById(episodeId)));
+      const episodes = await Promise.all(favorites.map((favorite) => fetchEpisodeById(favorite.episode_id)));
       setFavoriteEpisodes(episodes);
     };
     fetchData();
   }, [favorites]);
 
   const handleRemoveFavorite = (episodeId) => {
-    const updatedFavorites = favorites.filter((id) => id !== episodeId);
+    const updatedFavorites = favorites.filter((favorite) => favorite.episode_id !== episodeId);
     setFavorites(updatedFavorites);
     localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
   };
@@ -57,27 +56,38 @@ export default function FavoritesPage() {
     return groupedEpisodes;
   };
 
-  const sortEpisodesByDateUpdated = useCallback(() => {
-    const sortedEpisodes = [...favoriteEpisodes];
-    sortedEpisodes.sort((a, b) => {
-      const dateA = new Date(a.lastUpdated).getTime();
-      const dateB = new Date(b.lastUpdated).getTime();
-      if (sortOrder === 'asc') {
-        return dateA - dateB;
-      } else {
-        return dateB - dateA;
-      }
-    });
-    setFavoriteEpisodes(sortedEpisodes);
-  }, [favoriteEpisodes, sortOrder]);
-
-  useEffect(() => {
-    sortEpisodesByDateUpdated();
-  }, [sortEpisodesByDateUpdated]);
-
   const groupedEpisodes = groupEpisodesByShowAndSeason();
 
-  return (
+  const handleShareFavorites = async () => {
+    if (user) {
+      const publicFavorites = favorites.map((favorite) => ({ episode_id: favorite }));
+      try {
+        const { data, error } = await supabase.from('public_favorites').upsert(publicFavorites, { returning: 'minimal' });
+        if (!error) {
+          const shareUrl = `${window.location.origin}/share/${data[0].public_id}`;
+          if (navigator.clipboard) {
+            try {
+              await navigator.clipboard.writeText(shareUrl);
+              alert('Share URL copied to clipboard!');
+            } catch (error) {
+              console.error('Error copying to clipboard:', error.message);
+            }
+          } else {
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = shareUrl;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+            alert('Share URL copied to clipboard!');
+          }
+        }
+      } catch (error) {
+        console.error('Error sharing favorites:', error.message);
+      }
+    }
+  };
+    return (
     <div>
       <h1>Favorites</h1>
       <div>
@@ -89,6 +99,15 @@ export default function FavoritesPage() {
           </select>
         </label>
       </div>
+
+      <div>
+        {favorites.map((favorite) => (
+          <li key={favorite.episode_id}>
+            <span>Added on: {favorite.favoriteDate.toLocaleString()}</span>
+          </li>
+        ))}
+      </div>
+
       {Object.keys(groupedEpisodes).map((key) => {
         const episodes = groupedEpisodes[key];
         const { showId, showTitle, seasonNumber } = episodes[0];

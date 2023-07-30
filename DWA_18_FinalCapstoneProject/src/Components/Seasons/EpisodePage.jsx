@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { fetchEpisodeById } from '../Homepage/BrowseAllCard';
+import { fetchEpisodeById } from '../Homepage/BrowseAllCards';
 import supabase from '../Toggle/Supabase';
 import { UserContext } from '../Contexts/UserContext';
 
