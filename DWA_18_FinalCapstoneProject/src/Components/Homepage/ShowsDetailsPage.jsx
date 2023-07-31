@@ -5,12 +5,13 @@ import { fetchShowById } from './BrowseAllCards';
 import SeasonSelector from '../Seasons/SeasonSelector';
 import SeasonView from '../Seasons/SeasonView';
 import AudioSelector from '../Audio/AudioPlayer'; 
+import LoadingSpinnerSVG from '../Toggle/LoadingSpinnerSVG';
 
 export default function ShowsDetailsPage() {
   const { showId } = useParams();
   const [show, setShow] = React.useState(null);
   const [selectedSeason, setSelectedSeason] = React.useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = React.useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -21,43 +22,45 @@ export default function ShowsDetailsPage() {
     fetchData();
   }, [showId]);
 
-  if (loading) {
-    return <p>Loading...</p>;
-  }
-
   const handleSelectSeason = (seasonNumber) => {
     setSelectedSeason(seasonNumber);
   };
 
   return (
     <div>
-      <h2>{show.title}</h2>
-      <p>Description: {show.description}</p>
-      <p>Seasons: {show.seasons}</p>
-      <img src={show.image} alt={show.title} style={{ maxWidth: '200px' }} />
-      <p>Last Updated: {show.lastUpdated}</p>
-      <p>Genres: {show.genres.join(', ')}</p>
-      <p>Updated: {show.updated}</p>
-      <hr />
-
-      <AudioSelector shows={[show]} /> 
-
-      <h2>Seasons</h2>
-      {show.seasons.map((season) => (
-        <div key={season.number}>
-          <p>Season Number: {season.number}</p> 
-        </div>
-      ))}
-
-      <h2>Select a Season</h2>
-      <SeasonSelector seasons={show.seasons} onSelectSeason={handleSelectSeason} />
-
-      {selectedSeason && (
+      {loading ? ( 
+        <LoadingSpinnerSVG />
+      ) : (
         <div>
-          <img src={show.seasons[selectedSeason - 1].previewImageUrl} alt={`Season ${selectedSeason}`} />
-          <h3>Season {selectedSeason}</h3>
-          <p>Episodes: {show.seasons[selectedSeason - 1].episodes.length}</p>
-          <SeasonView episodes={show.seasons[selectedSeason - 1].episodes} />
+          <h2>{show.title}</h2>
+          <p>Description: {show.description}</p>
+          <p>Seasons: {show.seasons}</p>
+          <img src={show.image} alt={show.title} style={{ maxWidth: '200px' }} />
+          <p>Last Updated: {show.lastUpdated}</p>
+          <p>Genres: {show.genres.join(', ')}</p>
+          <p>Updated: {show.updated}</p>
+          <hr />
+
+          <AudioSelector shows={[show]} /> 
+
+          <h2>Seasons</h2>
+          {show.seasons.map((season) => (
+            <div key={season.number}>
+              <p>Season Number: {season.number}</p> 
+            </div>
+          ))}
+
+          <h2>Select a Season</h2>
+          <SeasonSelector seasons={show.seasons} onSelectSeason={handleSelectSeason} />
+
+          {selectedSeason && (
+            <div>
+              <img src={show.seasons[selectedSeason - 1].previewImageUrl} alt={`Season ${selectedSeason}`} />
+              <h3>Season {selectedSeason}</h3>
+              <p>Episodes: {show.seasons[selectedSeason - 1].episodes.length}</p>
+              <SeasonView episodes={show.seasons[selectedSeason - 1].episodes} />
+            </div>
+          )}
         </div>
       )}
     </div>

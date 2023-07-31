@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
+import LoadingSpinnerSVG from '../Toggle/LoadingSpinnerSVG';
 
 export default function BrowseAllCards() {
   const [previews, setPreviews] = useState([]);
@@ -9,7 +10,7 @@ export default function BrowseAllCards() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('https://podcast-api.netlify.app/shows');
+        const response = await fetch('https://podcast-api.netlify.app/');
         const data = await response.json();
         setPreviews(data);
         setLoading(false);
@@ -43,7 +44,7 @@ export default function BrowseAllCards() {
     <div>
       <h1>All Podcast Shows:</h1>
       {loading ? (
-        <p>Loading...</p>
+        <LoadingSpinnerSVG /> 
       ) : (
         previews.map((preview) => (
           <div key={preview.id}>

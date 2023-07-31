@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { fetchEpisodeById } from '../Homepage/BrowseAllCards';
 import supabase from '../Toggle/Supabase';
 import { UserContext } from '../Toggle/Contexts';
+import LoadingSpinnerSVG from '../Toggle/LoadingSpinnerSVG';
 
 export default function EpisodePage() {
   const { episodeId } = useParams();
@@ -12,16 +13,24 @@ export default function EpisodePage() {
   const [isPlaying, setIsPlaying] = React.useState(false);
   const [currentTime, setCurrentTime] = React.useState(0);
   const { user } = useContext(UserContext);
-  const [isFavorite, setIsFavorite] = React.useState(false); // Track whether the episode is in user's favorites
+  const [isFavorite, setIsFavorite] = React.useState(false); 
+  const [loading, setLoading] = React.useState(true); 
 
   useEffect(() => {
     const fetchData = async () => {
-      const episodeData = await fetchEpisodeById(episodeId);
-      setEpisode(episodeData);
+      try {
+        const episodeData = await fetchEpisodeById(episodeId);
+        setEpisode(episodeData);
+        setLoading(false); 
+      } catch (error) {
+        console.error('Error fetching episode data:', error.message);
+        setLoading(false); 
+      }
     };
+
+    
     fetchData();
   }, [episodeId]);
-
   useEffect(() => {
     if (audioRef) {
       isPlaying ? audioRef.play() : audioRef.pause();
@@ -86,10 +95,9 @@ export default function EpisodePage() {
     }
   };
 
-  if (!episode) {
-    return <p>Loading...</p>;
+  if (loading) {
+    return <LoadingSpinnerSVG />;
   }
-
   return (
     <div>
       <h1>

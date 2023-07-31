@@ -6,16 +6,19 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import Fuse from 'fuse.js';
 import supabase from '../Toggle/Supabase';
+import GenresList from '../Seasons/GenresList';
+import LoadingSpinnerSVG from '../Toggle/LoadingSpinnerSVG';
+
 
 export default function LandingPage() {
   const [recommendedShows, setRecommendedShows] = useState([]);
-  const [shows, setShows] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [sortOrder, setSortOrder] = useState('asc');
-  const [filterText, setFilterText] = useState('');
-  const [selectedGenre, setSelectedGenre] = useState(null);
-  const [user, setUser] = useState(null);
-  const [email, setEmail] = useState('');
+  const [shows, setShows] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
+  const [sortOrder, setSortOrder] = React.useState('asc');
+  const [filterText, setFilterText] = React.useState('');
+  const [selectedGenre, setSelectedGenre] = React.useState(null);
+  const [user, setUser] = React.useState(null);
+  const [email, setEmail] = React.useState('');
   const [password, setPassword] =  React.useState('');
 
   useEffect(() => {
@@ -167,10 +170,10 @@ export default function LandingPage() {
     ? shows.filter((show) => show.genres.includes(selectedGenre))
     : shows;
 
-  if (loading) {
-    return <p>Loading...</p>;
-  }
-
+    if (loading) {
+      return <LoadingSpinnerSVG />; 
+    }
+  
   const carouselSettings = {
     dots: true,
     infinite: true,
@@ -271,24 +274,18 @@ export default function LandingPage() {
         <button onClick={() => setSelectedGenre(null)}>Clear</button>
       </div>
       <ul>
-        {filteredShows.map((show) => (
-          <li key={show.id}>
-            <Link to={`/show/${show.id}`}>
-              <img src={show.image} alt={show.title} />
-              <span>{show.title}</span>
-              <span>{show.seasons} Seasons</span>
-              <span>Last Updated: {show.updated}</span>
-              <div>
-                Genres:{' '}
-                {show.genres.map((genreId) => (
-                  <span key={genreId}>{getGenreNameById(genreId)}</span>
-                ))}
-              </div>
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </div>
+  {filteredShows.map((show) => (
+    <li key={show.id}>
+      <Link to={`/show/${show.id}`}>
+        <img src={show.image} alt={show.title} />
+        <span>{show.title}</span>
+        <span>{show.seasons} Seasons</span>
+        <span>Last Updated: {show.updated}</span>
+        <GenresList genreId={show.genres[0]} />
+      </Link>
+    </li>
+  ))}
+</ul>    </div>
   </div>
 );
 }

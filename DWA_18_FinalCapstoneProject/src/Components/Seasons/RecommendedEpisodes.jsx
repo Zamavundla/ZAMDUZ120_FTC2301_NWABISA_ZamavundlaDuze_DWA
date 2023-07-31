@@ -5,7 +5,7 @@ import { fetchRecommendedEpisodes } from '../utils/api';
 import { UserContext } from '../Toggle/Contexts';
 
 export default function RecommendedEpisodes () {
-  const [recommendedEpisodes, setRecommendedEpisodes] = useState([]);
+  const [recommendedEpisodes, setRecommendedEpisodes] = React.useState([]);
   const { user } = useContext(UserContext); 
 
   useEffect(() => {

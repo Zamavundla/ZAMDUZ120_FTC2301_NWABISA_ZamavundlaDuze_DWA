@@ -2,6 +2,7 @@
 import React from "react";
 import PropTypes from 'prop-types'
 import AudioPlayer from './AudioPlayerr'
+import LoadingSpinnerSVG from "../Homepage/LoadingSpinnerSVG";
 
 
 export default function AudioSelector ({ shows }) {
@@ -21,17 +22,17 @@ export default function AudioSelector ({ shows }) {
             </li>
           ))}
         </ul>
-        {selectedShowId && (
+        {selectedShowId ? (
           <div>
             <h3>{shows.find((show) => show.id === selectedShowId).title}</h3>
             <AudioPlayer audioSrc={shows.find((show) => show.id === selectedShowId).updated} />
           </div>
+        ) : (
+          <LoadingSpinnerSVG />
         )}
       </div>
     );
-  }
-  
-  AudioSelector.propTypes = {
+  }  AudioSelector.propTypes = {
     shows: PropTypes.arrayOf(
       PropTypes.shape({
         id: PropTypes.string.isRequired,

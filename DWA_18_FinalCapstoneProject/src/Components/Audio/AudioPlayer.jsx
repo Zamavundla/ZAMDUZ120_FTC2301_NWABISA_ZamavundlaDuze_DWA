@@ -1,25 +1,26 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import LoadingSpinnerSVG from '../Toggle/LoadingSpinnerSVG'; 
 
 export default function AudioPlayer({ audioSrc }) {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [currentTime, setCurrentTime] = useState(0);
+  const [isPlaying, setIsPlaying] = React.useState(false);
+  const [currentTime, setCurrentTime] = React.useState(0);
   const audioRef = useRef(null);
-
   const progressKey = `progress_${audioSrc}`;
   const storedProgress = localStorage.getItem(progressKey);
   const initialProgress = storedProgress ? parseFloat(storedProgress) : 0;
-  const [progress, setProgress] = useState(initialProgress);
+  const [progress, setProgress] = React.useState(initialProgress);
+
+  useEffect(() => {
+    if (audioRef.current) {
+      isPlaying ? audioRef.current.play() : audioRef.current.pause();
+    }
+  }, [isPlaying, audioRef]);
 
   useEffect(() => {
     audioRef.current.currentTime = progress;
   }, [progress]);
-
-  const togglePlayPause = () => {
-    setIsPlaying((prevIsPlaying) => !prevIsPlaying);
-  };
 
   const handleTimeUpdate = () => {
     setCurrentTime(audioRef.current.currentTime);
@@ -43,9 +44,9 @@ export default function AudioPlayer({ audioSrc }) {
       localStorage.removeItem(progressKey);
     };
 
-    audioRef.current.addEventListener('ended', handleAudioEnded);
-
     const currentAudioRef = audioRef.current;
+    currentAudioRef.addEventListener('ended', handleAudioEnded);
+
     return () => {
       currentAudioRef.removeEventListener('ended', handleAudioEnded);
       localStorage.setItem(progressKey, String(currentAudioRef.currentTime));
@@ -67,6 +68,10 @@ export default function AudioPlayer({ audioSrc }) {
     };
   }, [isPlaying]);
 
+  if (!audioRef.current || isNaN(audioRef.current.duration) || audioRef.current.duration <= 0) {
+      return <LoadingSpinnerSVG />;
+  }
+
   return (
     <div>
       <audio
@@ -77,17 +82,19 @@ export default function AudioPlayer({ audioSrc }) {
         onEnded={() => setIsPlaying(false)}
       />
       <div>
-        <button onClick={togglePlayPause}>{isPlaying ? 'Pause' : 'Play'}</button>
+        <button onClick={() => setIsPlaying((prevIsPlaying) => !prevIsPlaying)}>
+          {isPlaying ? 'Pause' : 'Play'}
+        </button>
         <input
           type="range"
           min={0}
-          max={Math.floor(audioRef?.current?.duration || 0)}
+          max={Math.floor(audioRef.current?.duration || 0)}
           step={0.1}
           value={currentTime}
           onChange={handleSeek}
         />
         <span>{formatTimestamp(currentTime)}</span> /{' '}
-        <span>{formatTimestamp(audioRef?.current?.duration || 0)}</span>
+        <span>{formatTimestamp(audioRef.current?.duration || 0)}</span>
       </div>
     </div>
   );

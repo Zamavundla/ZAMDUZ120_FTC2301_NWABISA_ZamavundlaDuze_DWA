@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { fetchShows } from '../Homepage/BrowseAllCards';
 
 export default function ShowsList () {
-  const [shows, setShows] = useState([]);
+  const [shows, setShows] = React.useState([]);
 
   useEffect(() => {
     const fetchAllShows = async () => {
