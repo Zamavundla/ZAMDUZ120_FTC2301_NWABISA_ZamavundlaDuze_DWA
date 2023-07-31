@@ -1,12 +1,12 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
-import { useHistory} from 'react-router-dom';
+//import { useHistory} from 'react-router-dom';
 import PropTypes from 'prop-types'; 
 import AudioPlayer from '../Audio/AudioPlayer';
 
 export default function SeasonView({ episodes }) {
-  const history = useHistory();
-  const [favorites, setFavorites] = useState([]);
+  //const history = useHistory();
+  const [favorites, setFavorites] = React.useState([]);
 
   const toggleFavorite = (episodeId) => {
     if (favorites.includes(episodeId)) {

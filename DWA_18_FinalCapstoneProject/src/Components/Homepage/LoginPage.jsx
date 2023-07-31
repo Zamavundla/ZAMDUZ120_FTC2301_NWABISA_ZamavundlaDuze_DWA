@@ -16,7 +16,7 @@ export default function LoginPage() {
         console.error('Error logging in:', error.message);
       } else {
         console.log('Login successful:', user);
-        history.push('/LandingPage');
+        history.replace('/LandingPage');
       }
     } catch (error) {
       console.error('Error logging in:', error.message);

@@ -3,12 +3,12 @@ import React, { useEffect, useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { fetchEpisodeById, fetchShowById } from '../Homepage/BrowseAllCards';
 import supabase from '../Toggle/Supabase';
-import { UserContext } from './Contexts/UserContext';
+import { UserContext } from './Contexts';
 
 export default function FavoritesPage () {
-  const [favorites, setFavorites] = useState([]);
-  const [favoriteEpisodes, setFavoriteEpisodes] = useState([]);
-  const [sortOrder, setSortOrder] = useState('asc');
+  const [favorites, setFavorites] = React.useState([]);
+  const [favoriteEpisodes, setFavoriteEpisodes] = React.useState([]);
+  const [sortOrder, setSortOrder] = React.useState('asc');
   
   const { user } = useContext(UserContext); 
 

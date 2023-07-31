@@ -3,16 +3,16 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { fetchEpisodeById } from '../Homepage/BrowseAllCards';
 import supabase from '../Toggle/Supabase';
-import { UserContext } from '../Contexts/UserContext';
+import { UserContext } from '../Toggle/Contexts';
 
 export default function EpisodePage() {
   const { episodeId } = useParams();
-  const [episode, setEpisode] = useState(null);
-  const [audioRef, setAudioRef] = useState(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [currentTime, setCurrentTime] = useState(0);
+  const [episode, setEpisode] = React.useState(null);
+  const [audioRef, setAudioRef] = React.useState(null);
+  const [isPlaying, setIsPlaying] = React.useState(false);
+  const [currentTime, setCurrentTime] = React.useState(0);
   const { user } = useContext(UserContext);
-  const [isFavorite, setIsFavorite] = useState(false); // Track whether the episode is in user's favorites
+  const [isFavorite, setIsFavorite] = React.useState(false); // Track whether the episode is in user's favorites
 
   useEffect(() => {
     const fetchData = async () => {
@@ -108,7 +108,6 @@ export default function EpisodePage() {
         <input type="range" min={0} max={episode.duration} step={0.1} value={currentTime} onChange={handleSeek} />
         <span>{formatTimestamp(currentTime)}</span> / <span>{formatTimestamp(episode.duration)}</span>
       </div>
-      {/* Button to toggle favorite status */}
       {user && (
         <button onClick={handleToggleFavorite}>
           {isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}

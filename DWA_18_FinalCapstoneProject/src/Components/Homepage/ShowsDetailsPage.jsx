@@ -6,7 +6,7 @@ import SeasonSelector from '../Seasons/SeasonSelector';
 import SeasonView from '../Seasons/SeasonView';
 import AudioSelector from '../Audio/AudioPlayer'; 
 
-export default function ShowDetailsPage() {
+export default function ShowsDetailsPage() {
   const { showId } = useParams();
   const [show, setShow] = React.useState(null);
   const [selectedSeason, setSelectedSeason] = React.useState(null);
@@ -43,8 +43,8 @@ export default function ShowDetailsPage() {
       <AudioSelector shows={[show]} /> 
 
       <h2>Seasons</h2>
-      {show.seasons.map((season, index) => (
-        <div key={index}>
+      {show.seasons.map((season) => (
+        <div key={season.number}>
           <p>Season Number: {season.number}</p> 
         </div>
       ))}
