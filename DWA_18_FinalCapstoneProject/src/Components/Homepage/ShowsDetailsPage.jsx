@@ -1,10 +1,10 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { fetchShowById } from './BrowseAllCards'; 
+import { useParams, useNavigate } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import SeasonSelector from '../Seasons/SeasonSelector';
 import SeasonView from '../Seasons/SeasonView';
-import AudioSelector from '../Audio/AudioPlayer'; 
+import AudioSelector from '../Audio/AudioPlayer';
 import LoadingSpinnerSVG from '../Toggle/LoadingSpinnerSVG';
 
 export default function ShowsDetailsPage() {
@@ -12,12 +12,19 @@ export default function ShowsDetailsPage() {
   const [show, setShow] = React.useState(null);
   const [selectedSeason, setSelectedSeason] = React.useState(null);
   const [loading, setLoading] = React.useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await fetchShowById(showId);
-      setShow(data);
-      setLoading(false);
+      try {
+        const response = await fetch(`https://podcast-api.netlify.app/id/${showId}`);
+        const data = await response.json();
+        setShow(data);
+        setLoading(false);
+      } catch (error) {
+        console.error(`Error fetching show ${showId}:`, error);
+        setLoading(false);
+      }
     };
     fetchData();
   }, [showId]);
@@ -28,25 +35,25 @@ export default function ShowsDetailsPage() {
 
   return (
     <div>
-      {loading ? ( 
+      {loading ? (
         <LoadingSpinnerSVG />
       ) : (
         <div>
           <h2>{show.title}</h2>
           <p>Description: {show.description}</p>
-          <p>Seasons: {show.seasons}</p>
+          <p>Seasons: {show.seasons.length}</p>
           <img src={show.image} alt={show.title} style={{ maxWidth: '200px' }} />
-          <p>Last Updated: {show.lastUpdated}</p>
+          <p>Last Updated: {show.updated}</p>
           <p>Genres: {show.genres.join(', ')}</p>
           <p>Updated: {show.updated}</p>
           <hr />
 
-          <AudioSelector shows={[show]} /> 
+          <AudioSelector shows={[show]} />
 
           <h2>Seasons</h2>
           {show.seasons.map((season) => (
             <div key={season.number}>
-              <p>Season Number: {season.number}</p> 
+              <p>Season Number: {season.number}</p>
             </div>
           ))}
 

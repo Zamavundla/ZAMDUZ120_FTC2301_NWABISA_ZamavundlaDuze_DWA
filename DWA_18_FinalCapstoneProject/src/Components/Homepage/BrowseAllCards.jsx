@@ -22,19 +22,27 @@ export default function BrowseAllCards() {
     fetchData();
   }, []);
 
-  const fetchShow = async (showId) => {
+  const fetchShowAndEpisodes = async (showId) => {
     try {
-      const response = await fetch(`https://podcast-api.netlify.app/id/${showId}`);
-      const data = await response.json();
-      return data;
+      const showResponse = await fetch(`https://podcast-api.netlify.app/id/${showId}`);
+      const showData = await showResponse.json();
+
+      // Fetch episodes for the show
+      const episodesResponse = await fetch(`https://podcast-api.netlify.app/shows/${showId}/episodes`);
+      const episodesData = await episodesResponse.json();
+
+      // Add episodes to the show data
+      showData.episodes = episodesData;
+
+      return showData;
     } catch (error) {
-      console.error(`Error fetching show ${showId}:`, error);
+      console.error(`Error fetching show and episodes for ID ${showId}:`, error);
       return null;
     }
   };
 
   const handleShowDetails = async (showId) => {
-    const showData = await fetchShow(showId);
+    const showData = await fetchShowAndEpisodes(showId);
     if (showData) {
       setShows((prevShows) => [...prevShows, showData]);
     }
@@ -44,7 +52,7 @@ export default function BrowseAllCards() {
     <div>
       <h1>All Podcast Shows:</h1>
       {loading ? (
-        <LoadingSpinnerSVG /> 
+        <LoadingSpinnerSVG />
       ) : (
         previews.map((preview) => (
           <div key={preview.id}>
@@ -66,6 +74,7 @@ export default function BrowseAllCards() {
           <img src={show.image} alt={show.title} style={{ maxWidth: '200px' }} />
           <p>Genres: {show.genres.join(', ')}</p>
           <p>Updated: {show.updated}</p>
+          {/* Render episodes here */}
           <hr />
         </div>
       ))}
