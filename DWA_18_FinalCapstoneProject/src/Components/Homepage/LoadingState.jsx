@@ -2,15 +2,20 @@
 import React, { useEffect, useState } from 'react';
 import { fetchShows } from '../Components/BrowseAllCard'; 
 
-export default function LoadingState() {
-  const [shows, setShows] = useState([]);
-  const [loading, setLoading] = useState(true);
+export default function ShowListWithLoading() {
+  const [shows, setShows] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await fetchShows(); 
-      setShows(data);
-      setLoading(false);
+      try {
+        const data = await fetchShows();
+        setShows(data);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching shows:', error);
+        setLoading(false); 
+    }
     };
     fetchData();
   }, []);
@@ -18,7 +23,6 @@ export default function LoadingState() {
   if (loading) {
     return <p>Loading...</p>;
   }
-
   return (
     <div>
       <h1>All Podcast Shows:</h1>

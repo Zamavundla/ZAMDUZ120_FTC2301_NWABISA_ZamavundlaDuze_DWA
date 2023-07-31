@@ -13,7 +13,7 @@ import AudioPlayer from './Components/Audio/AudioPlayer';
 import supabase from './Components/Toggle/Supabase';
 import UserContext from './Components/Toggle/Contexts';
 import LandingPage from './Components/Homepage/LandingPage';
-import ShowDetailsPage from './Components/Homepage/ShowsDetailsPage';
+import ShowsDetailsPage from './Components/Homepage/ShowsDetailsPage';
 
 export default function App () {
   const [user, setUser] = React.useState(null);

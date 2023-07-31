@@ -1,23 +1,25 @@
-/* eslint-disable react-refresh/only-export-components */
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
-import LandingPage from './LandingPage';
-import LoginPage from './LoginPage'
-
 
 export default function BrowseAllCards() {
-  const [previews, setPreviews] = React.useState([]);
-  const [shows, setShows] = React.useState([]);
+  const [previews, setPreviews] = useState([]);
+  const [shows, setShows] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const fetchPreviews = async () => {
-    try {
-      const response = await fetch('https://podcast-api.netlify.app/shows');
-      const data = await response.json();
-      setPreviews(data);
-    } catch (error) {
-      console.error('Error fetching previews:', error);
-    }
-  };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('https://podcast-api.netlify.app/shows');
+        const data = await response.json();
+        setPreviews(data);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching previews:', error);
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
 
   const fetchShow = async (showId) => {
     try {
@@ -33,28 +35,28 @@ export default function BrowseAllCards() {
   const handleShowDetails = async (showId) => {
     const showData = await fetchShow(showId);
     if (showData) {
-      setShows([...shows, showData]);
+      setShows((prevShows) => [...prevShows, showData]);
     }
   };
-
-  useEffect(() => {
-    fetchPreviews();
-  }, []);
 
   return (
     <div>
       <h1>All Podcast Shows:</h1>
-      {previews.map((preview) => (
-        <div key={preview.id}>
-          <h2>{preview.title}</h2>
-          <p>Description: {preview.description}</p>
-          <img src={preview.image} alt={preview.title} style={{ maxWidth: '200px' }} />
-          <p>Genres: {preview.genres.join(', ')}</p>
-          <p>Updated: {preview.updated}</p>
-          <button onClick={() => handleShowDetails(preview.id)}>Show Details</button>
-          <hr />
-        </div>
-      ))}
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        previews.map((preview) => (
+          <div key={preview.id}>
+            <h2>{preview.title}</h2>
+            <p>Description: {preview.description}</p>
+            <img src={preview.image} alt={preview.title} style={{ maxWidth: '200px' }} />
+            <p>Genres: {preview.genres.join(', ')}</p>
+            <p>Updated: {preview.updated}</p>
+            <button onClick={() => handleShowDetails(preview.id)}>Show Details</button>
+            <hr />
+          </div>
+        ))
+      )}
       {shows.map((show) => (
         <div key={show.id}>
           <h2>{show.title}</h2>

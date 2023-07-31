@@ -6,7 +6,7 @@ export default function Header () {
   return (
     <header>
       <div>
-        <Link to="/">Podcast App</Link>
+        <Link to="/LandingPage">Navigating Horizons Podcast App</Link>
       </div>
       <nav>
         <ul>

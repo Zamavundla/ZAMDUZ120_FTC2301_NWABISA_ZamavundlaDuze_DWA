@@ -1,0 +1,160 @@
+* {
+    max-width: 100%;
+    padding: 10px;
+  }
+  
+  @media (min-width: 768px) {
+    * {
+      max-width: 768px;
+      margin: 0 auto;
+    }
+  }
+  
+  @media (min-width: 992px) {
+    * {
+      max-width: 992px;
+    }
+  }
+  
+  @media (min-width: 1200px) {
+    * {
+      max-width: 1200px;
+    }
+  }
+ /* Global styles */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #D8F3DC;
+  color: #081C15;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  font-weight: bold;
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  text-decoration: none;
+  color: #52B788;
+}
+
+/* Header styles */
+header {
+  background-color: #2D6A4F;
+  padding: 10px;
+  color: #D8F3DC;
+}
+
+/* Navigation styles */
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+}
+
+nav ul li {
+  margin-right: 20px;
+}
+
+/* Main content styles */
+main {
+  padding: 20px;
+}
+
+/* Footer styles */
+footer {
+  background-color: #1B4332;
+  color: #D8F3DC;
+  text-align: center;
+  padding: 10px;
+}
+
+/* Button styles */
+button {
+  background-color: #40916C;
+  color: #D8F3DC;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+button:hover {
+  background-color: #74C69D;
+}
+
+/* Form styles */
+form {
+  display: flex;
+  flex-direction: column;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+form label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+form input {
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #B7E4C7;
+  border-radius: 5px;
+}
+
+/* Show card styles */
+.show-card {
+  background-color: #95D5B2;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.show-card h2 {
+  color: #081C15;
+}
+
+.show-card p {
+  color: #081C15;
+}
+
+.show-card img {
+  max-width: 100%;
+  border-radius: 5px;
+}
+
+/* Episode card styles */
+.episode-card {
+  background-color: #B7E4C7;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.episode-card h3 {
+  color: #081C15;
+}
+
+.episode-card p {
+  color: #081C15;
+}
+
+.episode-card img {
+  max-width: 100%;
+  border-radius: 5px;
+}
+ 

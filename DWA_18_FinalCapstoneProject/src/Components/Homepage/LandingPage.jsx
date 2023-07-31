@@ -16,7 +16,7 @@ export default function LandingPage() {
   const [selectedGenre, setSelectedGenre] = useState(null);
   const [user, setUser] = useState(null);
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [password, setPassword] =  React.useState('');
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -116,6 +116,10 @@ export default function LandingPage() {
     setSortOrder(event.target.value);
   };
 
+  const handleSortByDate = (event) => {
+    setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+  };
+
   const sortShows = (showsToSort) => {
     const sortedShows = [...showsToSort];
     if (sortOrder === 'asc') {
@@ -124,10 +128,6 @@ export default function LandingPage() {
       sortedShows.sort((a, b) => b.title.localeCompare(a.title));
     }
     return sortedShows;
-  };
-
-  const handleSortByDate = (event) => {
-    setSortOrder(event.target.value);
   };
 
   const handleSortByUpdatedDate = () => {
@@ -171,7 +171,6 @@ export default function LandingPage() {
     return <p>Loading...</p>;
   }
 
-  // Settings for the react-slick carousel
   const carouselSettings = {
     dots: true,
     infinite: true,
@@ -197,11 +196,10 @@ export default function LandingPage() {
   return (
     <div>
       <h1>Welcome to the Navigating Horizons Podcast App!</h1>
-      {user ? ( // Conditional rendering based on user login status
+      {user ? ( 
         <div>
           <p>Welcome, {user.email}!</p>
           <button onClick={handleLogout}>Logout</button>
-          {/* You can display user-specific content here */}
         </div>
       ) : (
         <div>
