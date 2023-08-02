@@ -2,14 +2,14 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import supabase from '../Toggle/Supabase';
-import { UserContext } from './Contexts';
+import { useAuth } from '../Login/AuthProvider';
 import LoadingSpinnerSVG from '../Toggle/LoadingSpinnerSVG';
 
 export default function FavoritesPage() {
   const [favorites, setFavorites] = useState([]);
   const [favoriteEpisodes, setFavoriteEpisodes] = useState([]);
   const [sortOrder, setSortOrder] = useState('asc');
-  const { user } = useContext(UserContext);
+  const { user } = useContext(useAuth);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

@@ -1,51 +1,47 @@
+/* The code you provided is a JavaScript React code that sets up the main structure of a React
+application. Here's a breakdown of what it does: */
 /* eslint-disable no-unused-vars */
-import React, { useEffect } from 'react';
-import ReactDOM from 'react-dom/client';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+/* eslint-disable no-unused-vars */
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Container } from 'react-bootstrap';
+import { UserContext } from './Components/Toggle/UserContext'; 
 import Header from './Components/Homepage/Header';
-import BrowseAllCards from './Components/Homepage/BrowseAllCards';
+import Home from './Components/Homepage/Home';
 import LandingPage from './Components/Homepage/LandingPage';
 import ShowsDetailsPage from './Components/Homepage/ShowsDetailsPage';
 import SeasonView from './Components/Seasons/SeasonView';
-import EpisodePage from './Components/Seasons/EpisodePage';
+import EpisodePage from './Components/Seasons/EpisodePage'; 
 import FavoritesPage from './Components/Toggle/FavoritesPage';
-import { UserContext } from './Components/Toggle/Contexts';
 import AudioPlayer from './Components/Audio/AudioPlayer';
-import supabase from './Components/Toggle/Supabase';
-import LoginPage from './Components/Homepage/LoginPage';
+import Login from './Components/Login/Login';
+import { useAuth } from './Components/Login/AuthProvider';
 import LoadingSpinnerSVG from './Components/Toggle/LoadingSpinnerSVG';
 
-
 export default function App() {
-  /*const [user, setUser] = React.useState(null);
-
-  useEffect(() => {
-    const session = supabase.auth.session();
-    setUser(session?.user ?? null);
-
-    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
-      setUser(session?.user ?? null);
-    });
-
-    return () => {
-      authListener.unsubscribe();
-    };
-  }, []);*/
-
+  const { user } = useAuth(); 
   return (
-    <UserContext.Provider>
+    <UserContext.Provider value={user}>
       <Router>
         <div>
-          <LoginPage />
-          <Header />
+          {user ? (
+            <Header />
+          ) : (
+            <Container>
+              <Routes>
+                <Route path="/login" element={<Login />} />
+              </Routes>
+            </Container>
+          )}
           <Routes>
-            <Route path="/" element={<LandingPage />} />
+            <Route path="/" element={<Home />} />
             <Route path="/show/:showId" element={<ShowsDetailsPage />} />
             <Route path="/show/:showId/season/:seasonNumber" element={<SeasonView />} />
             <Route path="/show/:showId/season/:seasonNumber/episode/:episodeId" element={<EpisodePage />} />
             <Route path="/favorites" element={<FavoritesPage />} />
           </Routes>
-          <AudioPlayer />
+          {user && <AudioPlayer />} 
         </div>
       </Router>
     </UserContext.Provider>
@@ -53,3 +49,4 @@ export default function App() {
 }
 
 ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+

@@ -139,7 +139,7 @@ border-radius: 5px;
 
 /* Episode card styles */
 .episode-card {
-background-color: #23b857;
+background-color: #B7E4C7;
 padding: 10px;
 margin-bottom: 10px;
 border-radius: 5px;
@@ -157,4 +157,17 @@ color: #081C15;
 .episode-card img {
 max-width: 100%;
 border-radius: 5px;
+}
+
+.slider-container {
+  max-width: 800px; /* Adjust the width as per your requirement */
+  margin: 0 auto; /* Center the carousel horizontally */
+}
+
+.slick-slider {
+  max-width: 100%;
+}
+
+.slick-slide img {
+  max-width: 100%;
 }
