@@ -1,11 +1,13 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
 import LoadingSpinnerSVG from '../Toggle/LoadingSpinnerSVG';
+import SeasonView from '../Seasons/SeasonView';
 
 export default function BrowseAllCards() {
   const [previews, setPreviews] = useState([]);
   const [shows, setShows] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedShowEpisodes, setSelectedShowEpisodes] = useState({});
 
   useEffect(() => {
     const fetchData = async () => {
@@ -24,6 +26,7 @@ export default function BrowseAllCards() {
 
   const fetchShowAndEpisodes = async (showId) => {
     try {
+      // Fetch show details
       const showResponse = await fetch(`https://podcast-api.netlify.app/id/${showId}`);
       const showData = await showResponse.json();
 
@@ -42,9 +45,12 @@ export default function BrowseAllCards() {
   };
 
   const handleShowDetails = async (showId) => {
-    const showData = await fetchShowAndEpisodes(showId);
-    if (showData) {
-      setShows((prevShows) => [...prevShows, showData]);
+    if (!selectedShowEpisodes[showId]) {
+      const showData = await fetchShowAndEpisodes(showId);
+      if (showData) {
+        setShows((prevShows) => [...prevShows, showData]);
+        setSelectedShowEpisodes((prevEpisodes) => ({ ...prevEpisodes, [showId]: showData.episodes }));
+      }
     }
   };
 
@@ -74,7 +80,7 @@ export default function BrowseAllCards() {
           <img src={show.image} alt={show.title} style={{ maxWidth: '200px' }} />
           <p>Genres: {show.genres.join(', ')}</p>
           <p>Updated: {show.updated}</p>
-          {/* Render episodes here */}
+          {selectedShowEpisodes[show.id] && <SeasonView episodes={selectedShowEpisodes[show.id]} />}
           <hr />
         </div>
       ))}

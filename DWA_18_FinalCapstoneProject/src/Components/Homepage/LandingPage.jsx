@@ -23,12 +23,12 @@ export default function LandingPage() {
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const user = supabase.auth.user();
-      if (user) {
-        setUser(user);
+      const currentUser = supabase.auth.user();
+      if (currentUser) {
+        setUser(currentUser);
       }
     };
-
+  
     const fetchShowsData = async () => {
       try {
         const response = await fetch('https://podcast-api.netlify.app/');
@@ -42,22 +42,22 @@ export default function LandingPage() {
         console.error('Error fetching data:', error);
       }
     };
-
+  
     const getRandomItems = (array, count) => {
       const shuffledArray = shuffleArray(array);
       return shuffledArray.slice(0, count);
     };
-
+  
     const fetchRecommendedShows = () => {
       const randomRecommendedShows = getRandomItems(shows, 3);
       setRecommendedShows(randomRecommendedShows);
     };
-
+  
     fetchUserData();
     fetchShowsData();
     fetchRecommendedShows();
   }, [shows]);
-
+  
   const handleLogin = async (e) => {
     e.preventDefault();
     try {

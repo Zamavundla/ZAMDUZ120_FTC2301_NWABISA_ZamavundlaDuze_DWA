@@ -1,13 +1,13 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import supabase from '../Toggle/Supabase';
 
 export default function LoginPage() {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [error, setError] = React.useState(null); // State to hold the error message
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();

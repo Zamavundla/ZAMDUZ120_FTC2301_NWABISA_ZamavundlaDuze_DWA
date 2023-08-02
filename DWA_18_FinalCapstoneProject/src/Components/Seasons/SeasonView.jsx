@@ -1,12 +1,12 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import PropTypes from 'prop-types'; 
+import PropTypes from 'prop-types';
 import AudioPlayer from '../Audio/AudioPlayer';
 
 export default function SeasonView({ episodes }) {
   const navigate = useNavigate();
-  const [favorites, setFavorites] = React.useState([]);
+  const [favorites, setFavorites] = useState([]);
 
   const toggleFavorite = (episodeId) => {
     if (favorites.includes(episodeId)) {
@@ -27,21 +27,24 @@ export default function SeasonView({ episodes }) {
               {favorites.includes(episode.id) ? 'Remove from Favorites' : 'Add to Favorites'}
             </button>
           </h3>
-          <AudioPlayer audioSrc={episode.updated} />
+          {episode.updated && <AudioPlayer audioSrc={episode.updated} />}
         </div>
       ))}
     </div>
   );
 }
 
-// Add prop type validation
 SeasonView.propTypes = {
   episodes: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
-      updated: PropTypes.string.isRequired,
+      updated: PropTypes.string, // Make the 'updated' prop optional
       // Add other episode properties if necessary
     })
   ).isRequired,
+};
+
+SeasonView.defaultProps = {
+  episodes: [], // Provide a default empty array here or set it to any other default value as needed.
 };
