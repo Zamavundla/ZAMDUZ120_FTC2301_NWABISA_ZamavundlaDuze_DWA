@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
@@ -6,11 +5,15 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import LoadingSpinnerSVG from '../Toggle/LoadingSpinnerSVG';
-import Header from './Header';
-import supabase from '../Toggle/Supabase'; 
+import { UserContext } from '../Toggle/UserContext';
+import carouselSettings from './LandingPage'
+import supabase from '../Toggle/Supabase';
 import { useAuth } from '../Login/AuthProvider';
+import Header from './LandingPage';
+import BrowseAllCards from './BrowseAllCards';
+import Arrow from '../Toggle/Arrow'; // Add this import for the Arrow component
 
-const Home = () => {
+export default function Home() {
   const { user, signOut, signUp, signIn } = useAuth(); // Use your actual authentication context here
   const [recommendedShows, setRecommendedShows] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -43,9 +46,6 @@ const Home = () => {
   }, []);
 
   const getRandomItems = (array, count) => {
-    if (!Array.isArray(array)) {
-      return [];
-    }
     const shuffledArray = shuffleArray(array);
     return shuffledArray.slice(0, count);
   };
@@ -62,112 +62,70 @@ const Home = () => {
     return shuffledArray;
   };
 
-  const handleRegister = async (email, password) => {
-    try {
-      const { user, error } = await signUp(email, password);
-      if (error) {
-        throw new Error('Error in Creating Account');
-      }
-      console.log('Registration Successful:', user);
-    } catch (error) {
-      setError('Error in Creating Account');
-    }
-  };
-
-  const handleLogin = async (email, password) => {
-    try {
-      const { user, error } = await signIn(email, password);
-      if (error) {
-        throw new Error('Invalid credentials');
-      }
-      console.log('Login Successful:', user);
-    } catch (error) {
-      setError('Invalid credentials');
-    }
-  };
-
-  const carouselSettings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 5,
-    slidesToScroll: 15,
-    responsive: [
-      {
-        breakpoint: 768,
-        settings: {
-          slidesToShow: 2,
-        },
-      },
-      {
-        breakpoint: 480,
-        settings: {
-          slidesToShow: 1,
-        },
-      },
-    ],
-  };
-
   return (
-    <div>
+    <div style={{ display: 'flex', flexDirection: 'column' }}>
+      {/* Header */}
       <Header />
 
-      {user ? (
+      {/* Welcome Message */}
+      {user && (
         <div>
           <p>Welcome, {user.email}!</p>
           <button onClick={() => signOut()}>Logout</button>
         </div>
-      ) : (
-        <div>
-          <h2>Login</h2>
-          <form onSubmit={(e) => {
-            e.preventDefault();
-            const email = e.target.email.value;
-            const password = e.target.password.value;
-            handleLogin(email, password);
-          }}>
-            <label>Email</label>
-            <input type="email" name="email" required />
-            <label>Password</label>
-            <input type="password" name="password" required />
-            {error && <p>{error}</p>}
-            <button type="submit">Login</button>
-          </form>
-
-          <h2>Register</h2>
-          <form onSubmit={(e) => {
-            e.preventDefault();
-            const email = e.target.email.value;
-            const password = e.target.password.value;
-            handleRegister(email, password);
-          }}>
-            <label>Email</label>
-            <input type="email" name="email" required />
-            <label>Password</label>
-            <input type="password" name="password" required />
-            {error && <p>{error}</p>}
-            <button type="submit">Register</button>
-          </form>
-        </div>
       )}
 
-      <h2>Recommended Shows</h2>
-      {loading ? (
-        <LoadingSpinnerSVG />
-      ) : (
-        <Slider {...carouselSettings}>
-          {recommendedShows.map((show) => (
-            <div key={show.id}>
-              <Link to={`/show/${show.id}`}>
-                <img src={show.image} alt={show.title} />
-                <p>{show.title}</p>
-              </Link>
-            </div>
-          ))}
-        </Slider>
-      )}
+      {/* Recommended Shows */}
+      <div style={{ flex: '1', maxHeight: '25vh', overflowY: 'auto' }}>
+        <h2>Recommended Shows</h2>
+        {loading ? (
+          <LoadingSpinnerSVG />
+        ) : (
+          <Slider {...carouselSettings}>
+            {recommendedShows.map((show) => (
+              <div key={show.id}>
+                <Link to={`/show/${show.id}`}>
+                  <img src={show.image} alt={show.title} />
+                  <p>{show.title}</p>
+                </Link>
+              </div>
+            ))}
+          </Slider>
+        )}
+      </div>
+
+      {/* Additional Navbar */}
+      <div style={{ flex: '1', display: 'flex', justifyContent: 'space-between', marginTop: '1rem' }}>
+        <Link to="/">Home</Link>
+        <Link to="/favorites">Favorites</Link>
+        <Link to="/browse-all">Browse All Shows</Link>
+        <Link to="/about-us">About Us</Link>
+      </div>
+
+      {/* Facts about Maritime Industry */}
+      <div style={{ flex: '3', paddingTop: '1rem' }}>
+        <h2>Facts about Maritime Industry</h2>
+        {/* Add your facts content here */}
+      </div>
+
+      {/* Recommended Shows Again */}
+      <div style={{ flex: '1', maxHeight: '25vh', overflowY: 'auto' }}>
+        <h2>Recommended Shows</h2>
+        {loading ? (
+          <LoadingSpinnerSVG />
+        ) : (
+          <Slider {...carouselSettings}>
+            {recommendedShows.map((show) => (
+              <div key={show.id}>
+                <Link to={`/show/${show.id}`}>
+                  <img src={show.image} alt={show.title} />
+                  <p>{show.title}</p>
+                </Link>
+              </div>
+            ))}
+          </Slider>
+        )}
+      </div>
     </div>
   );
-};
-
-export default Home;
+}

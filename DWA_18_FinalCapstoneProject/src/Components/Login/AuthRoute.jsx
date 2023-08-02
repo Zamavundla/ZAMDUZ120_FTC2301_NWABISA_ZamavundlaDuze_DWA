@@ -1,5 +1,7 @@
+/* eslint-disable no-unused-vars */
+import React from 'react';
 import { useAuth } from "./AuthProvider";
-import { Navigate, Outlet, useLocation } from "react-router-dom";
+import { Navigate, Outlet, useLocation, Route } from "react-router-dom";
 
 const AuthRoute = () => {
   const { user } = useAuth();

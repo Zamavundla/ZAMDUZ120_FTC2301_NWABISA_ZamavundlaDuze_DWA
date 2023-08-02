@@ -1,13 +1,12 @@
-/* The code is a React component called "Register" that renders a registration form. It imports
-necessary dependencies from React and React Bootstrap libraries. It also imports a supabase instance
-from a file called "Supabase". */
-/* The code is a React component called "Register" that renders a registration form. It imports
-necessary dependencies from React and React Bootstrap libraries. It also imports a supabase instance
-from a file called "Supabase". */
+/* The code is a React component called "Register" that renders a registration form. It imports various
+dependencies such as useRef and useState from the 'react' library, as well as components from
+'react-bootstrap' and 'react-router-dom'. It also imports a 'Supabase' module from a custom file. */
+/* eslint-disable no-unused-vars */
 import { useRef, useState } from 'react';
 import { Alert, Button, Card, Form } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import supabase from '../Toggle/Supabase'; // Import your supabase instance
+import supabase from '../Toggle/Supabase'; 
+import { useAuth } from './AuthProvider';
 
 const Register = () => {
   const emailRef = useRef(null);
@@ -16,18 +15,6 @@ const Register = () => {
   const [errorMsg, setErrorMsg] = useState('');
   const [msg, setMsg] = useState('');
   const [loading, setLoading] = useState(false);
-
-  const register = async (email, password) => {
-    try {
-      const { error } = await supabase.auth.signUp({ email, password });
-      if (error) {
-        throw new Error('Error in Creating Account');
-      }
-      setMsg('Registration Successful. Check your email to confirm your account');
-    } catch (error) {
-      setErrorMsg('Error in Creating Account');
-    }
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -46,7 +33,22 @@ const Register = () => {
 
     setErrorMsg('');
     setLoading(true);
-    await register(emailRef.current.value, passwordRef.current.value);
+
+    try {
+      const { error } = await supabase.auth.signUp({
+        email: emailRef.current.value,
+        password: passwordRef.current.value,
+      });
+
+      if (error) {
+        throw new Error('Error in Creating Account');
+      }
+
+      setMsg('Registration Successful. Check your email to confirm your account');
+    } catch (error) {
+      setErrorMsg('Error in Creating Account');
+    }
+
     setLoading(false);
   };
 
@@ -79,7 +81,12 @@ const Register = () => {
               </Alert>
             )}
             <div className="text-center mt-2">
-              <Button disabled={loading} type="submit" className="w-50">
+              <Button
+                disabled={loading}
+                type="submit"
+                variant="contained"
+                color="primary"
+              >
                 Register
               </Button>
             </div>

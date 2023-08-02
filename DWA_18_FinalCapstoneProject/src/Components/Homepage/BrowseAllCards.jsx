@@ -5,7 +5,6 @@ import SeasonView from '../Seasons/SeasonView';
 
 export default function BrowseAllCards() {
   const [previews, setPreviews] = useState([]);
-  const [shows, setShows] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedShowEpisodes, setSelectedShowEpisodes] = useState({});
 
@@ -14,7 +13,7 @@ export default function BrowseAllCards() {
       try {
         const response = await fetch('https://podcast-api.netlify.app/');
         const data = await response.json();
-        setPreviews(data);
+        setPreviews(data.shows);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching previews:', error);
@@ -48,7 +47,6 @@ export default function BrowseAllCards() {
     if (!selectedShowEpisodes[showId]) {
       const showData = await fetchShowAndEpisodes(showId);
       if (showData) {
-        setShows((prevShows) => [...prevShows, showData]);
         setSelectedShowEpisodes((prevEpisodes) => ({ ...prevEpisodes, [showId]: showData.episodes }));
       }
     }
@@ -72,15 +70,15 @@ export default function BrowseAllCards() {
           </div>
         ))
       )}
-      {shows.map((show) => (
-        <div key={show.id}>
-          <h2>{show.title}</h2>
-          <p>Description: {show.description}</p>
-          <p>Seasons: {show.seasons.length}</p>
-          <img src={show.image} alt={show.title} style={{ maxWidth: '200px' }} />
-          <p>Genres: {show.genres.join(', ')}</p>
-          <p>Updated: {show.updated}</p>
-          {selectedShowEpisodes[show.id] && <SeasonView episodes={selectedShowEpisodes[show.id]} />}
+      {Object.keys(selectedShowEpisodes).map((showId) => (
+        <div key={showId}>
+          <h2>{selectedShowEpisodes[showId].title}</h2>
+          <p>Description: {selectedShowEpisodes[showId].description}</p>
+          <p>Seasons: {selectedShowEpisodes[showId].seasons.length}</p>
+          <img src={selectedShowEpisodes[showId].image} alt={selectedShowEpisodes[showId].title} style={{ maxWidth: '200px' }} />
+          <p>Genres: {selectedShowEpisodes[showId].genres.join(', ')}</p>
+          <p>Updated: {selectedShowEpisodes[showId].updated}</p>
+          {selectedShowEpisodes[showId] && <SeasonView episodes={selectedShowEpisodes[showId].episodes} />}
           <hr />
         </div>
       ))}
