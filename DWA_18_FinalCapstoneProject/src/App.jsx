@@ -17,7 +17,7 @@ import LoadingSpinnerSVG from './Components/Toggle/LoadingSpinnerSVG';
 
 
 export default function App() {
-  const [user, setUser] = React.useState(null);
+  /*const [user, setUser] = React.useState(null);
 
   useEffect(() => {
     const session = supabase.auth.session();
@@ -30,14 +30,14 @@ export default function App() {
     return () => {
       authListener.unsubscribe();
     };
-  }, []);
+  }, []);*/
 
   return (
-    <UserContext.Provider value={{ user }}>
+    <UserContext.Provider>
       <Router>
         <div>
+          <LoginPage />
           <Header />
-          <BrowseAllCards />
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/show/:showId" element={<ShowsDetailsPage />} />
