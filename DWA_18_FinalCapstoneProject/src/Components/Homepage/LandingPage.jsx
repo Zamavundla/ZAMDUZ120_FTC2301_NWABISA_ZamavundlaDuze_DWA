@@ -7,9 +7,8 @@ import Contact_Us from './ContactUs';
 import About_Us from './About Us';
 import ocean1 from 'C:/Users/suppo/OneDrive/Documents/CodeSpace Academy Challenges/Dynamic Web Applications/ZAMDUZ120_FTC2301_NWABISA_ZamavundlaDuze_DWA/DWA_18_FinalCapstoneProject/src/assets/ocean.jpg';
 import ocean2 from 'C:/Users/suppo/OneDrive/Documents/CodeSpace Academy Challenges/Dynamic Web Applications/ZAMDUZ120_FTC2301_NWABISA_ZamavundlaDuze_DWA/DWA_18_FinalCapstoneProject/src/assets/ocean2.jpg';
-import oceanVideo from 'C:/Users/suppo/OneDrive/Documents/CodeSpace Academy Challenges/Dynamic Web Applications/ZAMDUZ120_FTC2301_NWABISA_ZamavundlaDuze_DWA/DWA_18_FinalCapstoneProject/src/assets/sea.mp4';
 
-const imageSequence = [ocean1, ocean2, oceanVideo];
+const imageSequence = [ocean1, ocean2,];
 const imageInterval = 10000; // 10 seconds
 
 export default function LandingPage() {
