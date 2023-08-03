@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import AudioPlayer from '../Audio/AudioPlayer';
+import AudioSelector from '../Audio/AudioSelector';
 
 export default function SeasonView({ episodes }) {
   const navigate = useNavigate();
@@ -28,6 +29,15 @@ export default function SeasonView({ episodes }) {
             </button>
           </h3>
           {episode.updated && <AudioPlayer audioSrc={episode.updated} />}
+
+          {/* Add the audio button here */}
+          {episode.audio && (
+            <AudioSelector
+              audioSrc={episode.audio}
+              episodeTitle={episode.title}
+              showTitle={episode.showTitle}
+            />
+          )}
         </div>
       ))}
     </div>

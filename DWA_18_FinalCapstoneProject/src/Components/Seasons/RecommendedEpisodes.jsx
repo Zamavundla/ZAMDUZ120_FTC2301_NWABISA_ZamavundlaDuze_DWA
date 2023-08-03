@@ -1,12 +1,12 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { fetchRecommendedEpisodes } from '../utils/api';
-import { UserContext } from '../Toggle/Contexts';
+import { fetchRecommendedEpisodes } from '../Homepage/BrowseAllCards';
+import { useAuth } from '../Login/AuthProvider';
 
 export default function RecommendedEpisodes () {
   const [recommendedEpisodes, setRecommendedEpisodes] = React.useState([]);
-  const { user } = useContext(UserContext); 
+  const { user } = useAuth; 
 
   useEffect(() => {
     const fetchRecommendations = async () => {

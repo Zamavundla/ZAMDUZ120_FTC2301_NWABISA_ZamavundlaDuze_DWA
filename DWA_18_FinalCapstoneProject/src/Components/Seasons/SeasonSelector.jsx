@@ -1,15 +1,19 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
-import PropTypes from 'prop-types'; 
+import PropTypes from 'prop-types';
 
 export default function SeasonSelector({ seasons, onSelectSeason }) {
+  const handleSelectSeason = (seasonNumber) => {
+    onSelectSeason(seasonNumber);
+  };
+
   return (
     <div>
       <h2>Select a Season</h2>
       <ul>
         {seasons.map((season) => (
           <li key={season.number}>
-            <button onClick={() => onSelectSeason(season.number)}>Season {season.number}</button>
+            <button onClick={() => handleSelectSeason(season.number)}>Season {season.number}</button>
           </li>
         ))}
       </ul>

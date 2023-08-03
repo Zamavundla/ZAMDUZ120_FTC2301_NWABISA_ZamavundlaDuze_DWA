@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../Login/AuthProvider';
+import Home from './Home';
 import Contact_Us from './ContactUs';
 import About_Us from './About Us';
 import ocean1 from 'C:/Users/suppo/OneDrive/Documents/CodeSpace Academy Challenges/Dynamic Web Applications/ZAMDUZ120_FTC2301_NWABISA_ZamavundlaDuze_DWA/DWA_18_FinalCapstoneProject/src/assets/ocean.jpg';
@@ -32,7 +33,6 @@ export default function LandingPage() {
   
   return (
     <div>
-      {/* Header */}
       <header>
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
           <div className="container">
@@ -53,19 +53,19 @@ export default function LandingPage() {
             <div className="collapse navbar-collapse" id="navbarNav">
               <ul className="navbar-nav ms-auto">
                 <li className="nav-item">
-                  <Link className="nav-link" to="/">
-                    Home
-                  </Link>
+                <Link className="nav-link" to="/home" >
+                   Home
+                </Link>
                 </li>
                 <li className="nav-item">
-                <Link className="nav-link" to={About_Us}>
+                <Link className="nav-link" to="/About_Us">
                     About Us
                   </Link>
                 </li>
                 {user ? (
                   <>
                     <li className="nav-item">
-                      <Link className="nav-link" to={Contact_Us}>
+                      <Link className="nav-link" to="/Contact_Us">
                         Contact Us
                       </Link>
                     </li>
@@ -95,8 +95,8 @@ export default function LandingPage() {
         </nav>
       </header>
 
- {/* Body */}
- <div className="container my-5">
+  {/* Body */}
+  <div className="container my-5">
         <h1 className="display-2 text-center mb-4">Welcome to Navigating Horizons Podcast App</h1>
         {typeof currentImage === 'string' ? (
           <img
@@ -110,20 +110,16 @@ export default function LandingPage() {
           <video src={currentImage} controls className="img-fluid rounded mt-4" />
         )}
         <div className="d-grid gap-3 col-md-6 mx-auto mt-4">
-          {user ? (
-            <Link to="/form" className="btn btn-primary">
-              Go to Form
-            </Link>
-          ) : (
-            <>
-              <Link to="/login" className="btn btn-primary">
-                Login
-              </Link>
-              <Link to="/register" className="btn btn-secondary">
-                Register
-              </Link>
-            </>
-          )}        </div>
+        <Link to="/browse-all" className="btn btn-primary">
+          Go to Shows
+        </Link>
+         <Link to="/ogin" className="btn btn-primary">
+            Login
+          </Link>
+          <Link to="/register" className="btn btn-secondary">
+            Register
+          </Link>
+        </div>
       </div>
     </div>
   );

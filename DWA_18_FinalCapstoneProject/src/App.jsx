@@ -1,29 +1,27 @@
+/* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
+// App.js
 import React from 'react';
 import { createRoot } from 'react-dom';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { AuthProvider } from './Components/Login/AuthProvider';
+import LandingPage from './Components/Homepage/LandingPage';
 import Home from './Components/Homepage/Home';
-import Login from './Components/Login/Login';
-import Register from './Components/Login/Register';
+import BrowseAllCards from './Components/Homepage/BrowseAllCards';
+import { useAuth } from './Components/Login/AuthProvider';
 import Contact_Us from './Components/Homepage/ContactUs';
 import About_Us from './Components/Homepage/About Us';
-import LandingPage from './Components/Homepage/LandingPage';
-import AuthRoute from './Components/Login/AuthRoute'; // Import the AuthRoute component
 
 export default function App() {
   return (
-    <AuthProvider>
-      <Router>
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/register" element={<Register />} />
-          <Route element={<AuthRoute />}>
-            <Route path="/home" element={<Home />} />
-          </Route>
-        </Routes>
-      </Router>
-    </AuthProvider>
+    <Router>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/contact-us" element={<Contact_Us />} />
+        <Route path="/about-us" element={<About_Us />} />
+        <Route path="/browse-all" element={<BrowseAllCards />} />
+      </Routes>
+    </Router>
   );
 }
 

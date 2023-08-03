@@ -1,45 +1,40 @@
 /* eslint-disable no-unused-vars */
 import React from "react";
 import PropTypes from 'prop-types'
-import AudioPlayer from './AudioPlayerr'
-import LoadingSpinnerSVG from "../Homepage/LoadingSpinnerSVG";
+import AudioPlayer from './AudioPlayer'
+import LoadingSpinnerSVG from "../Toggle/LoadingSpinnerSVG";
 
 
-export default function AudioSelector ({ shows }) {
-    const [selectedShowId, setSelectedShowId] = React.useState(null);
-  
-    const handleSelectShow = (showId) => {
-      setSelectedShowId(showId);
-    };
-  
-    return (
-      <div>
-        <h2>Select a Show</h2>
-        <ul>
-          {shows.map((show) => (
-            <li key={show.id}>
-              <button onClick={() => handleSelectShow(show.id)}>{show.title}</button>
-            </li>
-          ))}
-        </ul>
-        {selectedShowId ? (
-          <div>
-            <h3>{shows.find((show) => show.id === selectedShowId).title}</h3>
-            <AudioPlayer audioSrc={shows.find((show) => show.id === selectedShowId).updated} />
-          </div>
-        ) : (
-          <LoadingSpinnerSVG />
-        )}
-      </div>
-    );
-  }  AudioSelector.propTypes = {
-    shows: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.string.isRequired,
-        title: PropTypes.string.isRequired,
-        updated: PropTypes.string.isRequired,
-      })
-    ).isRequired,
+const AudioSelector = ({ audioSrc, episodeTitle, showTitle }) => {
+  const [showAudioPlayer, setShowAudioPlayer] = React.useState(false);
+
+  const handleShowAudioPlayer = () => {
+    setShowAudioPlayer(true);
   };
-  
-  
+
+  const handleCloseAudioPlayer = () => {
+    setShowAudioPlayer(false);
+  };
+
+  return (
+    <div>
+      <button onClick={handleShowAudioPlayer}>Play Audio</button>
+      {showAudioPlayer && (
+        <div>
+          <button onClick={handleCloseAudioPlayer}>Close Audio Player</button>
+          <h3>{showTitle}</h3>
+          <h4>{episodeTitle}</h4>
+          <AudioPlayer audioSrc={audioSrc} />
+        </div>
+      )}
+    </div>
+  );
+};
+
+AudioSelector.propTypes = {
+  audioSrc: PropTypes.string.isRequired,
+  episodeTitle: PropTypes.string.isRequired,
+  showTitle: PropTypes.string.isRequired,
+};
+
+export default AudioSelector;

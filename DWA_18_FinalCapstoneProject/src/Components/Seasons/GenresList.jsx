@@ -1,8 +1,8 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
 
-export default function GenresList({ genreId }) {
+export default function GenresList({ genreIds }) {
   const genres = [
     { id: 1, title: 'Personal Growth' },
     { id: 2, title: 'True Crime and Investigative Journalism' },
@@ -15,26 +15,32 @@ export default function GenresList({ genreId }) {
     { id: 9, title: 'Kids and Family' },
   ];
 
-  // Function to get genre name by its ID
-  const getGenreNameById = (genreId) => {
-    const genre = genres.find((genre) => genre.id === genreId);
-    return genre ? genre.title : 'Unknown Genre';
+  // Function to get genre name(s) by their ID(s)
+  const getGenreNamesByIds = (genreIds) => {
+    const genreNames = genreIds.map((id) => {
+      const genre = genres.find((genre) => genre.id === id);
+      return genre ? genre.title : 'Unknown Genre';
+    });
+    return genreNames.join(', ');
   };
 
   return (
     <div>
       <h2>Genres</h2>
-      <ul>
-        {genres.map((genre) => (
-          <li key={genre.id}>
-            {genre.id === genreId ? <strong>{genre.title}</strong> : genre.title}
-          </li>
-        ))}
-      </ul>
+      <div className="genres-list">
+        {genreIds.map((genreId) => {
+          const genre = genres.find((genre) => genre.id === genreId);
+          return (
+            <button key={genreId} className="genre-button">
+              {genre && <span className="genre-name">{genre.title}</span>}
+            </button>
+          );
+        })}
+      </div>
     </div>
   );
 }
 
 GenresList.propTypes = {
-  genreId: PropTypes.number 
+  genreIds: PropTypes.arrayOf(PropTypes.number),
 };

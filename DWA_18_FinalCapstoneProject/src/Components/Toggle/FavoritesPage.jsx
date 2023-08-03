@@ -9,7 +9,7 @@ export default function FavoritesPage() {
   const [favorites, setFavorites] = useState([]);
   const [favoriteEpisodes, setFavoriteEpisodes] = useState([]);
   const [sortOrder, setSortOrder] = useState('asc');
-  const { user } = useContext(useAuth);
+  const { user } = useAuth();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -55,23 +55,25 @@ export default function FavoritesPage() {
       await supabase.from('favorites').delete().eq('user_id', user.id).eq('episode_id', episodeId);
       const updatedFavorites = favorites.filter((favorite) => favorite.episode_id !== episodeId);
       setFavorites(updatedFavorites);
-      localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
     } catch (error) {
       console.error('Error removing favorite:', error.message);
     }
   };
 
-  const groupEpisodesByShowAndSeason = () => {
-    const groupedEpisodes = {};
-    favoriteEpisodes.forEach((episode) => {
-      const key = `${episode.showId}-${episode.seasonNumber}`;
-      if (!groupedEpisodes[key]) {
-        groupedEpisodes[key] = [];
-      }
-      groupedEpisodes[key].push(episode);
-    });
-    return groupedEpisodes;
-  };
+
+const groupEpisodesByShowAndSeason = () => {
+  const groupedEpisodes = {};
+  favoriteEpisodes.forEach((episode) => {
+    const key = `${episode.showId}-${episode.seasonNumber}`;
+    if (!groupedEpisodes[key]) {
+      groupedEpisodes[key] = [];
+    }
+    groupedEpisodes[key].push(episode);
+  });
+  return groupedEpisodes;
+};
+
+
 
   const groupedEpisodes = groupEpisodesByShowAndSeason();
 
