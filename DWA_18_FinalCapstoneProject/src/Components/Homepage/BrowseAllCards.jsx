@@ -18,6 +18,8 @@ const BrowseAllCards = () => {
   const [selectedShowEpisodes, setSelectedShowEpisodes] = useState({});
   const [selectedShowId, setSelectedShowId] = useState(null);
   const [selectedSeason, setSelectedSeason] = useState(null);
+  const [likedShows, setLikedShows] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -36,7 +38,20 @@ const BrowseAllCards = () => {
     fetchData();
   }, []);
 
-  const navigate = useNavigate();
+  useEffect(() => {
+    const fetchLikedShows = async () => {
+      // Fetch the liked shows from the favorites API
+      try {
+        const response = await fetch('https://podcast-api.netlify.app/favorites');
+        const data = await response.json();
+        setLikedShows(data);
+      } catch (error) {
+        console.error('Error fetching liked shows:', error);
+      }
+    };
+
+    fetchLikedShows();
+  }, []);
 
   const fetchShowAndEpisodes = async (showId) => {
     try {
@@ -67,18 +82,25 @@ const BrowseAllCards = () => {
     setSelectedSeason(seasonNumber);
   };
 
-  const handleAddToFavorites = (showId, isLiked) => {
-    // Implement your favorites functionality here
+  const handleAddToFavoritesFromBrowseAll = async (showId, isLiked) => {
+    // Implement your favorites functionality here for the browseallcards component
     console.log(`Show ${showId} was ${isLiked ? 'liked' : 'disliked'}.`);
+    // Add/remove show from the likedShows state based on the isLiked value
+    if (isLiked) {
+      setLikedShows([...likedShows, showId]);
+    } else {
+      setLikedShows(likedShows.filter((id) => id !== showId));
+    }
   };
 
   return (
     <div>
- <h1>All Podcast Shows: 
-        <nav>        
+      <h1>All Podcast Shows:
+        <nav>
           <button onClick={() => navigate('/home')} style={{ fontSize: '12px' }}>Go Back</button>
         </nav>
-      </h1>      {loading ? (
+      </h1>
+      {loading ? (
         <LoadingSpinnerSVG />
       ) : (
         previews.map((preview) => (
@@ -93,7 +115,7 @@ const BrowseAllCards = () => {
                 style={thumbsStyle}
                 role="img"
                 aria-label="Thumbs Up"
-                onClick={() => handleAddToFavorites(preview.id, true)}
+                onClick={() => handleAddToFavoritesFromBrowseAll(preview.id, true)}
               >
                 👍
               </span>
@@ -101,7 +123,7 @@ const BrowseAllCards = () => {
                 style={thumbsStyle}
                 role="img"
                 aria-label="Thumbs Down"
-                onClick={() => handleAddToFavorites(preview.id, false)}
+                onClick={() => handleAddToFavoritesFromBrowseAll(preview.id, false)}
               >
                 👎
               </span>

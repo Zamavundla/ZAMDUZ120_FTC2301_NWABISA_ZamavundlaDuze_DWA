@@ -1,24 +1,17 @@
+/* eslint-disable no-undef */
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import Slider from 'react-slick';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
+import { Auth } from '@supabase/auth-ui-react'; // Import Auth component
+import { Carousel } from 'react-responsive-carousel';
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import LoadingSpinnerSVG from '../Toggle/LoadingSpinnerSVG';
-import { useAuth } from '../Login/AuthProvider';
-import supabase from '../Toggle/Supabase';
-import BrowseAllCards from './BrowseAllCards';
-import Arrow from '../Toggle/Arrow';
 
 export default function Home() {
-  const { user, signOut } = useAuth();
   const [recommendedShows, setRecommendedShows] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const sliderRef = useRef();
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [totalSlides, setTotalSlides] = useState(0);
 
   useEffect(() => {
     const fetchRecommendedShows = async () => {
@@ -38,82 +31,60 @@ export default function Home() {
     fetchRecommendedShows();
   }, []);
 
-  useEffect(() => {
-    // Set the total number of slides in the Slider component
-    setTotalSlides(recommendedShows.length);
-  }, [recommendedShows]);
+  const shuffledRecommendedShows = recommendedShows.sort(() => Math.random() - 0.5);
+  
+  // Use the Auth component to get the user
+  const user = Auth.useUser();
 
-  const getRandomItems = (array, count) => {
-    const shuffledArray = shuffleArray(array);
-    return shuffledArray.slice(0, count);
-  };
 
-  const shuffleArray = (array) => {
-    const shuffledArray = [...array];
-    for (let i = shuffledArray.length - 1; i > 0; i--) {
-      const randomIndex = Math.floor(Math.random() * (i + 1));
-      [shuffledArray[i], shuffledArray[randomIndex]] = [
-        shuffledArray[randomIndex],
-        shuffledArray[i],
-      ];
-    }
-    return shuffledArray;
-  };
-
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 300,
-    slidesToShow: 5,
-    slidesToScroll: 5,
-    autoplay: true,
-    autoplaySpeed: 30000, // 30 seconds per slide
-    prevArrow: <Arrow direction="prev" onClick={() => sliderRef.current.slickPrev()} />,
-    nextArrow: <Arrow direction="next" onClick={() => sliderRef.current.slickNext()} />,
-    beforeChange: (current, next) => setCurrentSlide(next),
-  };
-
-  return (
+return (
     <div className="home" style={{ display: 'flex', flexDirection: 'column' }}>
       {user && (
         <div>
           <p>Welcome, {user.email}!</p>
-          <button onClick={() => signOut()}>Logout</button>
+          <button onClick={() => Auth.signOut()}>Logout</button>
         </div>
       )}
 
       {/* Recommended Shows Carousel */}
-      <div style={{ maxHeight: '25vh', overflowY: 'hidden' }}>
+      <div style={{ maxHeight: '550vh', overflowY: 'hidden' }}>      <div style={{ maxHeight: '550vh', overflowY: 'hidden' }}>
         <h2>Recommended Shows</h2>
         {loading ? (
           <LoadingSpinnerSVG />
         ) : (
-          <Slider ref={sliderRef} {...settings}>
-            {recommendedShows.map((show) => (
+          <Carousel
+            showArrows
+            showStatus={false} // Hide the status/bullets
+            showThumbs={false} // Hide the thumbs/bullets
+            infiniteLoop
+            autoPlay
+            interval={5000} // 5 seconds interval
+            renderIndicator={() => null} // Render an empty element to hide the indicators completely
+          >
+            {shuffledRecommendedShows.map((show) => (
               <div key={show.id}>
                 <Link to={`/show/${show.id}`}>
-                  <img src={show.image} alt={show.title} />
-                  <p>{show.title}</p>
+                  <img
+                    src={show.image}
+                    alt={show.title}
+                    style={{ width: '100%', height: '400px', objectFit: 'cover' }}
+                  />
                 </Link>
+                <p>{show.title}</p>
               </div>
             ))}
-          </Slider>
+          </Carousel>
         )}
-        <p>
-          {currentSlide + 1} of {totalSlides}
-        </p>
       </div>
 
-      {/* Additional Navbar */}
-      <div style={{ flex: '1', display: 'flex', justifyContent: 'space-between', marginTop: '1rem' }}>
+  {/* Additional Navbar */}
+  <div style={{ flex: '1', display: 'flex', justifyContent: 'space-between', marginTop: '1rem' }}>
         <Link to="/">Navigating Horizons</Link>
         <Link to="/favorites">Favorites</Link>
         <Link to="/browse-all">Browse All Shows</Link>
         <Link to="/about-us">About Us</Link>
       </div>
-      <div style={{ flex: '3', paddingTop: '1rem' }}>
-        <h2>Facts about Oceans</h2>
-        <ul>
+      <div style={{ flex: '3', paddingTop: '1rem' }}>        <ul>
         <li>The Horizon Illusion: The horizon appears flat, but it's actually slightly curved due to the Earth's round shape.</li>
         <li>The Deepest Point: The Challenger Deep in the Mariana Trench is the deepest known point in the ocean, reaching a depth of about 36,070 feet (10,994 meters).</li>
         <li>Vast Ocean Area: Oceans cover approximately 71% of the Earth's surface, making them the largest ecosystems on the planet.</li>
@@ -132,5 +103,7 @@ export default function Home() {
       </ul>     
      </div>
      </div>
+     </div>
   );
 }
+

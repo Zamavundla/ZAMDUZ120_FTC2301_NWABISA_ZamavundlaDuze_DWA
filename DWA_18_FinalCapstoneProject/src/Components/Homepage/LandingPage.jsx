@@ -1,18 +1,21 @@
+/* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect, useMemo } from 'react';
-import { Link } from 'react-router-dom';
-import { useAuth } from '../Login/AuthProvider';
+import { Link, useNavigate } from 'react-router-dom';
+import { Auth } from '@supabase/auth-ui-react'
 import Home from './Home';
 import Contact_Us from './ContactUs';
 import About_Us from './About Us';
 import ocean1 from 'C:/Users/suppo/OneDrive/Documents/CodeSpace Academy Challenges/Dynamic Web Applications/ZAMDUZ120_FTC2301_NWABISA_ZamavundlaDuze_DWA/DWA_18_FinalCapstoneProject/src/assets/ocean.jpg';
 import ocean2 from 'C:/Users/suppo/OneDrive/Documents/CodeSpace Academy Challenges/Dynamic Web Applications/ZAMDUZ120_FTC2301_NWABISA_ZamavundlaDuze_DWA/DWA_18_FinalCapstoneProject/src/assets/ocean2.jpg';
+import { supabase } from '../Toggle/supabaseClient';
+
 
 const imageSequence = [ocean1, ocean2,];
 const imageInterval = 10000; // 10 seconds
 
 export default function LandingPage() {
-  const { user, signOut } = useAuth();
+  const user = Auth.useUser({ supabase });
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
@@ -29,7 +32,15 @@ export default function LandingPage() {
   }, [currentIndex]);
 
   const currentImage = imageSequence[currentIndex];
-  
+
+  const handleSignOut = async () => {
+    try {
+      await user.signOut();
+    } catch (error) {
+      console.error('Error signing out:', error.message);
+    }
+  };
+
   return (
     <div>
       <header>
@@ -52,41 +63,42 @@ export default function LandingPage() {
             <div className="collapse navbar-collapse" id="navbarNav">
               <ul className="navbar-nav ms-auto">
                 <li className="nav-item">
-                <Link className="nav-link" to="/home" >
-                   Home
-                </Link>
-                </li>
+              <Link className="nav-link" to="/home">
+                Home
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/about-us">
+                About Us
+              </Link>
+            </li>
+            {user ? (
+              <>
                 <li className="nav-item">
-                <Link className="nav-link" to="/About_Us">
-                    About Us
+                  <Link className="nav-link" to="/contact-us">
+                    Contact Us
                   </Link>
                 </li>
-                {user ? (
-                  <>
-                    <li className="nav-item">
-                      <Link className="nav-link" to="/Contact_Us">
-                        Contact Us
-                      </Link>
-                    </li>
-                    <li className="nav-item">
-                      <button className="btn btn-link nav-link" onClick={signOut}>
-                        Logout
-                      </button>
-                    </li>
-                  </>
-                ) : (
-                  <>
-                    <li className="nav-item">
-                      <Link className="nav-link" to={useAuth}>
-                        Login
-                      </Link>
-                    </li>
-                    <li className="nav-item">
-                      <Link className="nav-link" to={useAuth}>
-                        Register
-                      </Link>
-                    </li>
-                  </>
+                <li className="nav-item">
+                  <button className="btn btn-link nav-link" onClick={handleSignOut}>
+                    Logout
+                  </button>
+                </li>
+              </>
+            ) : (
+              <>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/Auth">
+                    Login
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/Account">
+                    Register
+                  </Link>
+                </li>
+              </>
+
                 )}
               </ul>
             </div>
@@ -102,22 +114,32 @@ export default function LandingPage() {
             src={currentImage}
             alt="Ocean Waves"
             className="img-fluid rounded"
+            style={{ height: '400px', width: '100%', cursor: 'pointer' }}
             onClick={() => setCurrentIndex((prevIndex) => (prevIndex === imageSequence.length - 1 ? 0 : prevIndex + 1))}
-            style={{ cursor: 'pointer' }}
           />
         ) : (
-          <video src={currentImage} controls className="img-fluid rounded mt-4" />
+          <video src={currentImage} controls className="img-fluid rounded mt-4" style={{ height: '400px', width: '100%' }} />
         )}
         <div className="d-grid gap-3 col-md-6 mx-auto mt-4">
-        <Link to="/browse-all" className="btn btn-primary">
-          Go to Shows
-        </Link>
-         <Link to="/ogin" className="btn btn-primary">
-            Login
-          </Link>
-          <Link to="/register" className="btn btn-secondary">
-            Register
-          </Link>
+          {user ? (
+            <>
+              <Link to="/browse-all" className="btn btn-primary">
+                Go to Shows
+              </Link>
+              <button className="btn btn-link nav-link" onClick={handleSignOut}>
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              <Link to="/Auth" className="btn btn-primary">
+                Login
+              </Link>
+              <Link to="/Account" className="btn btn-primary">
+                Register
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </div>
