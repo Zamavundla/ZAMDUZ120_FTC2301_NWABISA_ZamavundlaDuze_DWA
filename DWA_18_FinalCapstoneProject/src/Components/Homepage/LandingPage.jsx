@@ -17,6 +17,8 @@ const imageInterval = 10000; // 10 seconds
 export default function LandingPage() {
   const user = Auth.useUser({ supabase });
   const [currentIndex, setCurrentIndex] = useState(0);
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     // Function to update the current index
@@ -36,6 +38,7 @@ export default function LandingPage() {
   const handleSignOut = async () => {
     try {
       await user.signOut();
+      navigate('/');
     } catch (error) {
       console.error('Error signing out:', error.message);
     }
@@ -78,11 +81,6 @@ export default function LandingPage() {
                   <Link className="nav-link" to="/contact-us">
                     Contact Us
                   </Link>
-                </li>
-                <li className="nav-item">
-                  <button className="btn btn-link nav-link" onClick={handleSignOut}>
-                    Logout
-                  </button>
                 </li>
               </>
             ) : (
@@ -135,7 +133,7 @@ export default function LandingPage() {
               <Link to="/Auth" className="btn btn-primary">
                 Login
               </Link>
-              <Link to="/Account" className="btn btn-primary">
+              <Link to="/Auth" className="btn btn-primary">
                 Register
               </Link>
             </>
