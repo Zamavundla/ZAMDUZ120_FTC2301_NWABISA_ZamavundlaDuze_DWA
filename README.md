@@ -27,6 +27,7 @@ And from DWA_15 - DWA_17 is Scrimba React Course (InfoSite, Airbnb, and Meme Gen
 - **DWA_15:** Build static info page using React
 - **DWA_16:** Build AirBnB experiences site using React
 - **DWA_17:** Build a Meme Generator site using React
+- **DWA_18:** Building of  Navigating Horizons Podcast App (more details please refer to the project READMe file
 
 ## Tools
 
