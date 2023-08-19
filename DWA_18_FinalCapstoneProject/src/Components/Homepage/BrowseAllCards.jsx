@@ -1,13 +1,13 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Auth } from '@supabase/auth-ui-react';
 import GenresList from '../Seasons/GenresList';
 import AudioSelector from '../Audio/AudioSelector';
 import SeasonSelector from '../Seasons/SeasonSelector';
 import SeasonView from '../Seasons/SeasonView';
 import LoadingSpinnerSVG from '../Toggle/LoadingSpinnerSVG';
-import Fuse from 'fuse.js'; // Make sure to install Fuse.js
+import Fuse from 'fuse.js';
+import Show from '../Seasons/Show'; 
 
 const thumbsStyle = {
   marginRight: '1rem',
@@ -21,22 +21,26 @@ const BrowseAllCards = () => {
   const [selectedShowId, setSelectedShowId] = useState(null);
   const [selectedSeason, setSelectedSeason] = useState(null);
   const [likedShows, setLikedShows] = useState([]);
+  const [filterByGenre, setFilterByGenre] = useState('');
+  const [sortByUpdated, setSortByUpdated] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchOnlineData = async () => {
       try {
         const response = await fetch('https://podcast-api.netlify.app/shows');
         const data = await response.json();
         setPreviews(data);
         setLoading(false);
       } catch (error) {
-        console.error('Error fetching show data:', error);
+        console.error('Error fetching online data:', error);
         setLoading(false);
       }
     };
 
-    fetchData();
+    // Fetch online data
+    fetchOnlineData();
   }, []);
 
   useEffect(() => {
@@ -90,31 +94,31 @@ const BrowseAllCards = () => {
     }
   };
 
-  const [filterByGenre, setFilterByGenre] = useState(null);
-  const [selectedGenre, setSelectedGenre] = useState(null);
-  const [sortByAsc, setSortByAsc] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
+  const handleSortByUpdated = (event) => {
+    setSortByUpdated(event.target.value);
+  };
 
+  const genres = [
+    { id: 1, title: 'Personal Growth' },
+    { id: 2, title: 'True Crime and Investigative Journalism' },
+    { id: 3, title: 'History' },
+    { id: 4, title: 'Comedy' },
+    { id: 5, title: 'Entertainment' },
+    { id: 6, title: 'Business' },
+    { id: 7, title: 'Fiction' },
+    { id: 8, title: 'News' },
+    { id: 9, title: 'Kids and Family' },
+  ];
 
   const handleFilterByGenre = (event) => {
-    const selectedGenreId = parseInt(event.target.value);
-    setSelectedGenre(selectedGenreId);
-  };
-
-
-  const handleSort = () => {
-    setSortByAsc((prevSort) => !prevSort);
-  };
-
-  const handleSearch = (event) => {
-    setSearchTerm(event.target.value);
+    setFilterByGenre(event.target.value);
   };
 
   let filteredPreviews = previews;
 
-  if (filterByGenre !== null) {
+  if (filterByGenre !== '') {
     filteredPreviews = filteredPreviews.filter((preview) =>
-      preview.genres.includes(filterByGenre)
+      preview.genres.includes(Number(filterByGenre))
     );
   }
 
@@ -123,46 +127,69 @@ const BrowseAllCards = () => {
     filteredPreviews = fuse.search(searchTerm).map((result) => result.item);
   }
 
-  if (sortByAsc) {
-    filteredPreviews = [...filteredPreviews].sort((a, b) => a.title.localeCompare(b.title));
-  } else {
-    filteredPreviews = [...filteredPreviews].sort((a, b) => b.title.localeCompare(a.title));
+  if (sortByUpdated === 'asc') {
+    filteredPreviews = [...filteredPreviews].sort((a, b) =>
+      a.updated.localeCompare(b.updated)
+    );
+  } else if (sortByUpdated === 'desc') {
+    filteredPreviews = [...filteredPreviews].sort((a, b) =>
+      b.updated.localeCompare(a.updated)
+    );
   }
 
   return (
     <div>
-      <h1>All Podcast Shows:</h1>
-      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
-        <div style={{ marginRight: '1rem' }}>
-          <h2>Filter by Genre:</h2>
-          <GenresList genreIds={[]} onFilter={handleFilterByGenre} />
-        </div>
-        <div style={{ marginRight: '1rem' }}>
-          <h2>Sort:</h2>
-          <button onClick={handleSort}>
-            Sort {sortByAsc ? 'Descending' : 'Ascending'}
+      <h1>
+        All Podcast Shows:
+        <nav>
+          <button onClick={() => navigate('/home')} style={{ fontSize: '12px' }}>
+            Go Back
           </button>
-        </div>
-        <div>
-          <h2>Search:</h2>
-          <input
-            type="text"
-            placeholder="Search..."
-            value={searchTerm}
-            onChange={handleSearch}
-          />
-        </div>
+        </nav>
+      </h1>
+      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
+        <label htmlFor="genreDropdown">Filter by Genre:</label>
+        <select
+          id="genreDropdown"
+          onChange={handleFilterByGenre}
+          value={filterByGenre}
+        >
+          <option value="">All</option>
+          {genres.map((genre) => (
+            <option key={genre.id} value={genre.id}>
+              {genre.title}
+            </option>
+          ))}
+        </select>
+        <label htmlFor="sortDropdown">Sort by Updated:</label>
+        <select
+          id="sortDropdown"
+          onChange={handleSortByUpdated}
+          value={sortByUpdated}
+          style={{ marginLeft: '0.5rem' }}
+        >
+          <option value="">All</option>
+          <option value="asc">Ascending</option>
+          <option value="desc">Descending</option>
+        </select>
+        <input
+          type="text"
+          placeholder="Search..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          style={{ marginLeft: '0.5rem' }}
+        />
       </div>
       {loading ? (
- <LoadingSpinnerSVG />
- ) : (
-  filteredPreviews.map((preview) => (
-    <div key={preview.id}>
-      <h2>{preview.title}</h2>
-      <p>Description: {preview.description.slice(0, 200)}...</p>
-      <img src={preview.image} alt={preview.title} style={{ maxWidth: '200px' }} />
-      <GenresList genreIds={preview.genres} />
-      <div style={{ display: 'flex', alignItems: 'center' }}>              {/* Thumbs-up and thumbs-down emojis with spacing */}
+        <LoadingSpinnerSVG />
+      ) : (
+        filteredPreviews.map((preview) => (
+          <div key={preview.id}>
+            <h2>{preview.title}</h2>
+            <p>Description: {preview.description.slice(0, 200) + '...'}</p>
+            <img src={preview.image} alt={preview.title} style={{ maxWidth: '200px' }} />
+            <GenresList genreIds={preview.genres} />
+            <div style={{ display: 'flex', alignItems: 'center' }}>
               <span
                 style={thumbsStyle}
                 role="img"
@@ -180,11 +207,16 @@ const BrowseAllCards = () => {
                 👎
               </span>
               <div>
-                <p style={{ marginRight: '1rem' }}>Updated: {preview.updated}</p>
+                <p style={{ marginRight: '1rem' }}>
+                  Updated: {new Date(preview.updated).toLocaleDateString()}
+                </p>
                 <button onClick={() => handleShowDetails(preview.id)}>Show Details</button>
-              </div>       
-              {/* Audio button */}
-              <AudioSelector audioSrc={preview.audio} episodeTitle={preview.title} showTitle={preview.title} />
+              </div>
+              <AudioSelector
+                audioSrc={preview.audio}
+                episodeTitle={preview.title}
+                showTitle={preview.title}
+              />
             </div>
             <hr />
             {selectedShowId === preview.id && (
@@ -200,6 +232,14 @@ const BrowseAllCards = () => {
                   )}
                   selectedSeason={selectedSeason}
                 />
+                <button onClick={() => handleShowDetails(null)}>Show Less</button>
+                <Link to={`/episode/${preview.id}`} style={{ marginLeft: '0.5rem' }}>
+                  <button>Show More</button>
+                </Link>
+                {/* Integrate the Show component */}
+                {selectedShowId === preview.id && (
+                  <Show show={selectedShowEpisodes[preview.id]} onClose={() => handleShowDetails(null)} />
+                )}
               </div>
             )}
           </div>

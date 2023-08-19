@@ -1,8 +1,10 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import LoadingSpinnerSVG from '../Toggle/LoadingSpinnerSVG';
+import AudioPlayer from '../Audio/AudioPlayer'; // 
+import AudioSelector from '../Audio/AudioSelector'; // 
+import { fetchEpisode } from '../podcast-api-data/show'; 
 
 export default function EpisodePage() {
   const { episodeId } = useParams();
@@ -15,7 +17,7 @@ export default function EpisodePage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`https://podcast-api.netlify.app/id/${episodeId}`);
+        const response = await fetchEpisode(episodeId); // Use the correct fetch function
         const data = await response.json();
         setEpisode(data);
         setLoading(false);
@@ -59,12 +61,16 @@ export default function EpisodePage() {
       </h1>
       <h2>{episode.title}</h2>
       <p>{episode.description}</p>
-      <audio
-        ref={(element) => setAudioRef(element)}
-        src={episode.updated}
-        onTimeUpdate={handleTimeUpdate}
-        onEnded={() => setIsPlaying(false)}
-      />
+      
+      {/* Add the audio button here */}
+      {episode.file && (
+        <AudioSelector
+          audioSrc={episode.file}
+          episodeTitle={episode.title}
+          showTitle={episode.showTitle}
+        />
+      )}
+      
       <div>
         <button onClick={handlePlayPause}>{isPlaying ? 'Pause' : 'Play'}</button>
         <input type="range" min={0} max={episode.duration} step={0.1} value={currentTime} onChange={handleSeek} />
