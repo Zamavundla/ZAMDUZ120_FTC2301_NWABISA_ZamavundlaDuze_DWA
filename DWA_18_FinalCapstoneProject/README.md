@@ -54,7 +54,7 @@ Genre information is exposed on PREVIEW using GENRE ids. A mapping between GENRE
 
 ## User Stories
 
-Your goal is to meet the requirements of the following user stories, creating a fully functional podcast app:
+The goal is to meet the requirements of the following user stories, creating a fully functional podcast app:
 
 1. The app is deployed to a custom Netlify URL.
 2. All views display correctly on "iPhone SE" or other devices.
