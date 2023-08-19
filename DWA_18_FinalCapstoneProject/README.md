@@ -121,4 +121,4 @@ To deploy the project, follow these steps:
 
 ## Conclusion
 
-This readme provides an overview of the Podcast App project, including its technology stack, data structure, endpoints, relationships, user stories, deployment process, and submission instructions. Have fun building your fully functional podcast app!
+This readme provides an overview of the Podcast App project, including its technology stack, data structure, endpoints, relationships, user stories, deployment process. Have fun building your fully functional podcast app!
