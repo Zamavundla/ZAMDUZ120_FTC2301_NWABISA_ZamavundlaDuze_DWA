@@ -5,9 +5,8 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ReactDOM } from 'react-dom/client';
 import { createRoot } from 'react-dom/client'
 import { createClient } from '@supabase/supabase-js';
-import { Auth } from '@supabase/auth-ui-react';
 import { supabase } from './Components/Toggle/supabaseClient';
-import { ThemeSupa } from '@supabase/auth-ui-shared';
+import Login from './Components/Login/Login';
 import LandingPage from './Components/Homepage/LandingPage';
 import Home from './Components/Homepage/Home';
 import BrowseAllCards from './Components/Homepage/BrowseAllCards';
@@ -18,6 +17,7 @@ import About_Us from './Components/Homepage/About Us';
 export default function App() {
   return (
     <Router>
+      <Login />
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/home" element={<Home />} />
