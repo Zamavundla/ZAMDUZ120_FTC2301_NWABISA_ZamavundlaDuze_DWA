@@ -1,7 +1,8 @@
 /* eslint-disable no-unused-vars */
 import React from "react";
-import { supabase } from "../Toggle/supabaseClient";
-import { Grid, Paper, Avatar, TextField, Button, Typography, Link } from "@mui/material";
+import { Link } from "react-router-dom";
+import { supabase } from '../Toggle/supabaseClient'; 
+import { Grid, Paper, Avatar, TextField, Button, Typography } from "@mui/material";
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
