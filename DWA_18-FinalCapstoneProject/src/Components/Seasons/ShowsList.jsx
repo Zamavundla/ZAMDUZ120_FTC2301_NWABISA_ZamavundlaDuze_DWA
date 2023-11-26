@@ -39,9 +39,7 @@ const ShowList = () => {
 
   const fetchShowDetails = async (showId) => {
     try {
-      const response = await fetch(
-        `https://podcast-api.netlify.app/id/${showId}`
-      );
+      const response = await     fetch(`https://podcast-api.netlify.app/id/${id}`);
       const data = await response.json();
       setSelectedShow(data);
     } catch (error) {

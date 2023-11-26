@@ -59,7 +59,7 @@ const BrowseAllCards = () => {
 
   const fetchShowAndEpisodes = async (showId) => {
     try {
-      const showResponse = await fetch(`https://podcast-api.netlify.app/id/${showId}`);
+      const showResponse = await     fetch(`https://podcast-api.netlify.app/id/${id}`);
       const showData = await showResponse.json();
       return showData;
     } catch (error) {

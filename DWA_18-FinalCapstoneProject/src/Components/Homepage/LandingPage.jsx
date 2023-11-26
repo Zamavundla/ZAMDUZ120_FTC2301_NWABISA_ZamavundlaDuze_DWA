@@ -6,8 +6,8 @@ import { Auth } from '@supabase/auth-ui-react'
 import Home from './Home';
 import Contact_Us from './ContactUs';
 import About_Us from './About Us';
-import ocean1 from 'C:/Users/suppo/OneDrive/Documents/CodeSpace Academy Challenges/Dynamic Web Applications/ZAMDUZ120_FTC2301_NWABISA_ZamavundlaDuze_DWA/DWA_18-FinalCapstoneProject/src/assets/ocean.jpg';
-import ocean2 from 'C:/Users/suppo/OneDrive/Documents/CodeSpace Academy Challenges/Dynamic Web Applications/ZAMDUZ120_FTC2301_NWABISA_ZamavundlaDuze_DWA/DWA_18-FinalCapstoneProject/src/assets/ocean2.jpg';
+import ocean1 from 'C:/Users/zsdou/Documents/ZAMDUZ120_FTC2301_NWABISA_ZamavundlaDuze_DWA/DWA_18-FinalCapstoneProject/src/assets/ocean.jpg';
+import ocean2 from 'C:/Users/zsdou/Documents/ZAMDUZ120_FTC2301_NWABISA_ZamavundlaDuze_DWA/DWA_18-FinalCapstoneProject/src/assets/ocean2.jpg';
 import { supabase } from '../Toggle/supabaseClient';
 
 
