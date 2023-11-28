@@ -10,8 +10,7 @@ import ocean1 from 'C:/Users/zsdou/Documents/ZAMDUZ120_FTC2301_NWABISA_Zamavundl
 import ocean2 from 'C:/Users/zsdou/Documents/ZAMDUZ120_FTC2301_NWABISA_ZamavundlaDuze_DWA/DWA_18-FinalCapstoneProject/src/assets/ocean2.jpg';
 import { supabase } from '../Toggle/supabaseClient';
 
-
-const imageSequence = [ocean1, ocean2,];
+const imageSequence = [ocean1, ocean2];
 const imageInterval = 10000; // 10 seconds
 
 export default function LandingPage() {
@@ -19,17 +18,13 @@ export default function LandingPage() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const navigate = useNavigate();
 
-
   useEffect(() => {
-    // Function to update the current index
     const updateIndex = () => {
       setCurrentIndex((prevIndex) => (prevIndex === imageSequence.length - 1 ? 0 : prevIndex + 1));
     };
 
-    // Start the loop
     const loop = setTimeout(updateIndex, imageInterval);
 
-    // Clear the timeout when the component unmounts
     return () => clearTimeout(loop);
   }, [currentIndex]);
 
@@ -66,37 +61,41 @@ export default function LandingPage() {
             <div className="collapse navbar-collapse" id="navbarNav">
               <ul className="navbar-nav ms-auto">
                 <li className="nav-item">
-              <Link className="nav-link" to="/home">
-                Home
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/about-us">
-                About Us
-              </Link>
-            </li>
-            {user ? (
-              <>
-                <li className="nav-item">
-                  <Link className="nav-link" to="/contact-us">
-                    Contact Us
-                  </Link>
-                </li>
-              </>
-            ) : (
-              <>
-                <li className="nav-item">
-                  <Link className="nav-link" to="/Login">
-                    Login
+                  <Link className="nav-link" to="/home">
+                    Home
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link" to="/Account">
-                    Register
+                  <Link className="nav-link" to="/about-us">
+                    About Us
                   </Link>
                 </li>
-              </>
-
+                {user ? (
+                  <>
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/contact-us">
+                        Contact Us
+                      </Link>
+                    </li>
+                    <li className="nav-item">
+                      <button className="btn btn-link nav-link" onClick={handleSignOut}>
+                        Logout
+                      </button>
+                    </li>
+                  </>
+                ) : (
+                  <>
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/login">
+                        Login
+                      </Link>
+                    </li>
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/register">
+                        Register
+                      </Link>
+                    </li>
+                  </>
                 )}
               </ul>
             </div>
@@ -104,42 +103,44 @@ export default function LandingPage() {
         </nav>
       </header>
 
-  {/* Body */}
-  <div className="container my-5">
-        <h1 className="display-2 text-center mb-4">Welcome to Navigating Horizons Podcast App</h1>
-        {typeof currentImage === 'string' ? (
-          <img
-            src={currentImage}
-            alt="Ocean Waves"
-            className="img-fluid rounded"
-            style={{ height: '400px', width: '100%', cursor: 'pointer' }}
-            onClick={() => setCurrentIndex((prevIndex) => (prevIndex === imageSequence.length - 1 ? 0 : prevIndex + 1))}
-          />
-        ) : (
-          <video src={currentImage} controls className="img-fluid rounded mt-4" style={{ height: '400px', width: '100%' }} />
-        )}
-        <div className="d-grid gap-3 col-md-6 mx-auto mt-4">
-          {user ? (
-            <>
+      <main>
+        <div className="container my-5">
+          <h1 className="display-2 text-center mb-4">Welcome to Navigating Horizons Podcast App</h1>
+          {typeof currentImage === 'string' ? (
+            <img
+              src={currentImage}
+              alt="Ocean Waves"
+              className="img-fluid rounded"
+              style={{ height: '400px', width: '100%', cursor: 'pointer' }}
+              onClick={() =>
+                setCurrentIndex((prevIndex) => (prevIndex === imageSequence.length - 1 ? 0 : prevIndex + 1))
+              }
+            />
+          ) : (
+            <video src={currentImage} controls className="img-fluid rounded mt-4" style={{ height: '400px', width: '100%' }} />
+          )}
+          <div className="d-grid gap-3 col-md-6 mx-auto mt-4">
+            {user ? (
               <Link to="/browse-all" className="btn btn-primary">
                 Go to Shows
               </Link>
-              <button className="btn btn-link nav-link" onClick={handleSignIn}>
-                Login
-              </button>
-            </>
-          ) : (
-            <>
-              <Link to="/Login" className="btn btn-primary">
-                Login
-              </Link>
-              <Link to="/" className="btn btn-primary">
-                Register
-              </Link>
-            </>
-          )}
+            ) : (
+              <>
+                <Link to="/login" className="btn btn-primary">
+                  Login
+                </Link>
+                <Link to="/register" className="btn btn-primary">
+                  Register
+                </Link>
+              </>
+            )}
+          </div>
         </div>
-      </div>
+      </main>
+
+      <footer>
+        {/* Footer content */}
+      </footer>
     </div>
   );
 }

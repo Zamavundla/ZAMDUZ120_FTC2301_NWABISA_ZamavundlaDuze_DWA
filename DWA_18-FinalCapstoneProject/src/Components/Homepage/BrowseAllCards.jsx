@@ -59,6 +59,7 @@ const BrowseAllCards = () => {
 
   const fetchShowAndEpisodes = async (showId) => {
     try {
+      // eslint-disable-next-line no-undef
       const showResponse = await     fetch(`https://podcast-api.netlify.app/id/${id}`);
       const showData = await showResponse.json();
       return showData;
