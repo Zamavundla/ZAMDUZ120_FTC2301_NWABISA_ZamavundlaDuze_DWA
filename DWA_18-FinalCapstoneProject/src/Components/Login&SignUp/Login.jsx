@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { supabase } from "./client";
+import { supabase } from "./Client";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -51,10 +51,13 @@ function LoginPage({ setSession }) {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const { user, error } = await supabase.auth.signIn({
+      console.log(supabase.auth);
+
+      const { user, error } = await supabase.auth.signInWithPassword({
         email: formData.email,
         password: formData.password,
       });
+      console.log(user, error);
 
       if (error) {
         throw error;

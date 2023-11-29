@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import supabase from '../Toggle/Supabase';
+import supabase from '../Login&SignUp/Client';
 import { Auth } from '@supabase/supabase-js';
 import LoadingSpinnerSVG from '../Toggle/LoadingSpinnerSVG';
 
