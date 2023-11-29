@@ -1,14 +1,14 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
-import React, { useState, useEffect, useMemo } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Auth } from '@supabase/auth-ui-react'
-import Home from './Home';
-import Contact_Us from './ContactUs';
-import About_Us from './About Us';
-import ocean1 from 'C:/Users/zsdou/Documents/ZAMDUZ120_FTC2301_NWABISA_ZamavundlaDuze_DWA/DWA_18-FinalCapstoneProject/src/assets/ocean.jpg';
-import ocean2 from 'C:/Users/zsdou/Documents/ZAMDUZ120_FTC2301_NWABISA_ZamavundlaDuze_DWA/DWA_18-FinalCapstoneProject/src/assets/ocean2.jpg';
-import { supabase } from '../Toggle/supabaseClient';
+import React, { useState, useEffect, useMemo } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Auth } from "@supabase/auth-ui-react";
+import Home from "./Home";
+import Contact_Us from "./Contac_Us";
+import About_Us from "./About_Us";
+import ocean1 from "/src/assets/ocean.jpg";
+import ocean2 from "/src/assets/ocean2.jpg";
+import { supabase } from "../Login&SignUp/Client";
 
 const imageSequence = [ocean1, ocean2];
 const imageInterval = 10000; // 10 seconds
@@ -20,7 +20,9 @@ export default function LandingPage() {
 
   useEffect(() => {
     const updateIndex = () => {
-      setCurrentIndex((prevIndex) => (prevIndex === imageSequence.length - 1 ? 0 : prevIndex + 1));
+      setCurrentIndex((prevIndex) =>
+        prevIndex === imageSequence.length - 1 ? 0 : prevIndex + 1
+      );
     };
 
     const loop = setTimeout(updateIndex, imageInterval);
@@ -33,9 +35,9 @@ export default function LandingPage() {
   const handleSignOut = async () => {
     try {
       await user.signOut();
-      navigate('/');
+      navigate("/");
     } catch (error) {
-      console.error('Error signing out:', error.message);
+      console.error("Error signing out:", error.message);
     }
   };
 
@@ -78,7 +80,10 @@ export default function LandingPage() {
                       </Link>
                     </li>
                     <li className="nav-item">
-                      <button className="btn btn-link nav-link" onClick={handleSignOut}>
+                      <button
+                        className="btn btn-link nav-link"
+                        onClick={handleSignOut}
+                      >
                         Logout
                       </button>
                     </li>
@@ -105,19 +110,28 @@ export default function LandingPage() {
 
       <main>
         <div className="container my-5">
-          <h1 className="display-2 text-center mb-4">Welcome to Navigating Horizons Podcast App</h1>
-          {typeof currentImage === 'string' ? (
+          <h1 className="display-2 text-center mb-4">
+            Welcome to Navigating Horizons Podcast App
+          </h1>
+          {typeof currentImage === "string" ? (
             <img
               src={currentImage}
               alt="Ocean Waves"
               className="img-fluid rounded"
-              style={{ height: '400px', width: '100%', cursor: 'pointer' }}
+              style={{ height: "400px", width: "100%", cursor: "pointer" }}
               onClick={() =>
-                setCurrentIndex((prevIndex) => (prevIndex === imageSequence.length - 1 ? 0 : prevIndex + 1))
+                setCurrentIndex((prevIndex) =>
+                  prevIndex === imageSequence.length - 1 ? 0 : prevIndex + 1
+                )
               }
             />
           ) : (
-            <video src={currentImage} controls className="img-fluid rounded mt-4" style={{ height: '400px', width: '100%' }} />
+            <video
+              src={currentImage}
+              controls
+              className="img-fluid rounded mt-4"
+              style={{ height: "400px", width: "100%" }}
+            />
           )}
           <div className="d-grid gap-3 col-md-6 mx-auto mt-4">
             {user ? (
@@ -138,9 +152,7 @@ export default function LandingPage() {
         </div>
       </main>
 
-      <footer>
-        {/* Footer content */}
-      </footer>
+      <footer>{/* Footer content */}</footer>
     </div>
   );
 }
