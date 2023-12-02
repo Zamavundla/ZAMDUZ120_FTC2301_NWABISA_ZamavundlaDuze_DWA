@@ -2,7 +2,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+/**
+ * Functional component representing a list of genres.
+ * @component
+ * @param {Object} props - The properties passed to the component.
+ * @param {Array} props.genreIds - The array of genre IDs.
+ * @returns {JSX.Element} - The rendered JSX element.
+ */
 export default function GenresList({ genreIds }) {
+  /**
+   * Array of predefined genres with their IDs and titles.
+   * @type {Array}
+   */
   const genres = [
     { id: 1, title: 'Personal Growth' },
     { id: 2, title: 'True Crime and Investigative Journalism' },
@@ -15,7 +26,12 @@ export default function GenresList({ genreIds }) {
     { id: 9, title: 'Kids and Family' },
   ];
 
-  // Function to get genre name(s) by their ID(s)
+  /**
+   * Gets the names of genres based on their IDs.
+   * @param {Array} genreIds - The array of genre IDs.
+   * @returns {string} - The names of genres separated by commas.
+   * @function
+   */
   const getGenreNamesByIds = (genreIds) => {
     const genreNames = genreIds.map((id) => {
       const genre = genres.find((genre) => genre.id === id);
@@ -41,6 +57,16 @@ export default function GenresList({ genreIds }) {
   );
 }
 
+/**
+ * Prop types for the GenresList component.
+ * @typedef {Object} GenresListProps
+ * @property {Array} genreIds - The array of genre IDs.
+ */
+
+/**
+ * PropTypes for the GenresList component.
+ * @type {GenresListProps}
+ */
 GenresList.propTypes = {
   genreIds: PropTypes.arrayOf(PropTypes.number),
 };

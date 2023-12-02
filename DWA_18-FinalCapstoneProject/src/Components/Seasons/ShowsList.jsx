@@ -2,14 +2,29 @@
 import React, { useState, useEffect } from "react";
 import Show from "./Show.jsx";
 
+/**
+ * Component representing a list of shows with various functionalities.
+ * @component
+ */
 const ShowList = () => {
+  /** State for storing show previews */
   const [previews, setPreviews] = useState([]);
+  /** State indicating whether data is loading */
   const [loading, setLoading] = useState(true);
+  /** State for storing expanded show previews */
   const [showPreviews, setShowPreviews] = useState({});
+  /** State for storing details of a selected show */
   const [selectedShow, setSelectedShow] = useState(null);
+  /** State for storing favorite shows */
   const [favoriteShows, setFavoriteShows] = useState([]);
-  const [filterText, setFilterText] = useState(""); // New state for filtering
+  /** State for filtering shows by title */
+  const [filterText, setFilterText] = useState("");
 
+  /**
+   * Fetches show data from the API.
+   * @async
+   * @function
+   */
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -30,6 +45,11 @@ const ShowList = () => {
     fetchData();
   }, []);
 
+  /**
+   * Toggles the visibility of show previews.
+   * @param {string} showId - The ID of the show.
+   * @function
+   */
   const togglePreview = (showId) => {
     setShowPreviews((prevShowPreviews) => ({
       ...prevShowPreviews,
@@ -37,9 +57,15 @@ const ShowList = () => {
     }));
   };
 
+  /**
+   * Fetches details of a specific show.
+   * @async
+   * @param {string} showId - The ID of the show.
+   * @function
+   */
   const fetchShowDetails = async (showId) => {
     try {
-      const response = await     fetch(`https://podcast-api.netlify.app/id/${id}`);
+      const response = await fetch(`https://podcast-api.netlify.app/id/${showId}`);
       const data = await response.json();
       setSelectedShow(data);
     } catch (error) {
@@ -47,10 +73,20 @@ const ShowList = () => {
     }
   };
 
+  /**
+   * Closes the details view of a selected show.
+   * @function
+   */
   const closeShowDetails = () => {
     setSelectedShow(null);
   };
 
+  /**
+   * Formats a date into a human-readable string.
+   * @param {string} date - The date to be formatted.
+   * @returns {string} - The formatted date.
+   * @function
+   */
   const formatDate = (date) => {
     return new Date(date).toLocaleDateString("en-US", {
       year: "numeric",
@@ -59,6 +95,11 @@ const ShowList = () => {
     });
   };
 
+  /**
+   * Toggles the favorite status of a show.
+   * @param {string} showId - The ID of the show.
+   * @function
+   */
   const toggleFavorite = (showId) => {
     setPreviews((prevPreviews) =>
       prevPreviews.map((show) =>
@@ -78,6 +119,11 @@ const ShowList = () => {
     }
   };
 
+  /**
+   * Sorts favorite shows based on the specified order.
+   * @param {string} order - The sorting order ("asc" or "desc").
+   * @function
+   */
   const sortFavoriteShows = (order) => {
     const sortedFavorites = [...favoriteShows];
     sortedFavorites.sort((a, b) => {
@@ -96,6 +142,12 @@ const ShowList = () => {
     setFavoriteShows(sortedFavorites);
   };
 
+  /**
+   * Sorts shows based on the specified order and attribute.
+   * @param {string} order - The sorting order ("asc" or "desc").
+   * @param {string} sortBy - The attribute to sort by ("title" or "date").
+   * @function
+   */
   const sortShows = (order, sortBy) => {
     const sortedPreviews = [...previews];
     sortedPreviews.sort((a, b) => {
@@ -115,6 +167,7 @@ const ShowList = () => {
     setPreviews(sortedPreviews);
   };
 
+  /** Filters previews based on the specified filter text */
   const filteredPreviews = previews.filter((show) =>
     show.title.toLowerCase().includes(filterText.toLowerCase())
   );

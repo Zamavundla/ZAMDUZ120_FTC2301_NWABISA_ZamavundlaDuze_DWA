@@ -1,88 +1,73 @@
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import LoadingSpinnerSVG from '../Toggle/LoadingSpinnerSVG';
-import AudioPlayer from '../Audio/AudioPlayer'; // 
-import AudioSelector from '../Audio/AudioSelector'; // 
-import { fetchEpisode } from '../podcast-api-data/show'; 
+import React from 'react';
+import PropTypes from 'prop-types';
 
-export default function EpisodePage() {
-  const { episodeId } = useParams();
-  const [episode, setEpisode] = useState(null);
-  const [audioRef, setAudioRef] = useState(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [loading, setLoading] = useState(true);
+/**
+ * Functional component representing a list of genres.
+ * @component
+ * @param {Object} props - The properties passed to the component.
+ * @param {Array} props.genreIds - The array of genre IDs.
+ * @returns {JSX.Element} - The rendered JSX element.
+ */
+export default function GenresList({ genreIds }) {
+  /**
+   * Array of predefined genres with their IDs and titles.
+   * @type {Array}
+   */
+  const genres = [
+    { id: 1, title: 'Personal Growth' },
+    { id: 2, title: 'True Crime and Investigative Journalism' },
+    { id: 3, title: 'History' },
+    { id: 4, title: 'Comedy' },
+    { id: 5, title: 'Entertainment' },
+    { id: 6, title: 'Business' },
+    { id: 7, title: 'Fiction' },
+    { id: 8, title: 'News' },
+    { id: 9, title: 'Kids and Family' },
+  ];
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetchEpisode(episodeId); // Use the correct fetch function
-        const data = await response.json();
-        setEpisode(data);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching episode data:', error.message);
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [episodeId]);
-
-  useEffect(() => {
-    if (audioRef) {
-      isPlaying ? audioRef.play() : audioRef.pause();
-    }
-  }, [isPlaying, audioRef]);
-
-  const handlePlayPause = () => {
-    setIsPlaying((prevState) => !prevState);
+  /**
+   * Gets the names of genres based on their IDs.
+   * @param {Array} genreIds - The array of genre IDs.
+   * @returns {string} - The names of genres separated by commas.
+   * @function
+   */
+  const getGenreNamesByIds = (genreIds) => {
+    const genreNames = genreIds.map((id) => {
+      const genre = genres.find((genre) => genre.id === id);
+      return genre ? genre.title : 'Unknown Genre';
+    });
+    return genreNames.join(', ');
   };
-
-  const handleTimeUpdate = () => {
-    setCurrentTime(audioRef.currentTime);
-  };
-
-  const handleSeek = (event) => {
-    const seekTime = parseFloat(event.target.value);
-    setCurrentTime(seekTime);
-    audioRef.currentTime = seekTime;
-  };
-
-  if (loading) {
-    return <LoadingSpinnerSVG />;
-  }
 
   return (
     <div>
-      <h1>
-        {episode.showTitle} - Season {episode.seasonNumber} - Episode {episode.episodeNumber}
-      </h1>
-      <h2>{episode.title}</h2>
-      <p>{episode.description}</p>
-      
-      {/* Add the audio button here */}
-      {episode.file && (
-        <AudioSelector
-          audioSrc={episode.file}
-          episodeTitle={episode.title}
-          showTitle={episode.showTitle}
-        />
-      )}
-      
-      <div>
-        <button onClick={handlePlayPause}>{isPlaying ? 'Pause' : 'Play'}</button>
-        <input type="range" min={0} max={episode.duration} step={0.1} value={currentTime} onChange={handleSeek} />
-        <span>{formatTimestamp(currentTime)}</span> / <span>{formatTimestamp(episode.duration)}</span>
+      <h2>Genres</h2>
+      <div className="genres-list">
+        {genreIds.map((genreId) => {
+          const genre = genres.find((genre) => genre.id === genreId);
+          return (
+            <button key={genreId} className="genre-button">
+              {genre && <span className="genre-name">{genre.title}</span>}
+            </button>
+          );
+        })}
       </div>
     </div>
   );
 }
 
-// Helper function to format timestamp in seconds to MM:SS format
-const formatTimestamp = (time) => {
-  const minutes = Math.floor(time / 60);
-  const seconds = Math.floor(time % 60);
-  return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+/**
+ * Prop types for the GenresList component.
+ * @typedef {Object} GenresListProps
+ * @property {Array} genreIds - The array of genre IDs.
+ */
+
+/**
+ * PropTypes for the GenresList component.
+ * @type {GenresListProps}
+ */
+GenresList.propTypes = {
+  genreIds: PropTypes.arrayOf(PropTypes.number),
 };
+

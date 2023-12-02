@@ -2,6 +2,19 @@
 import React from "react";
 import PropTypes from 'prop-types';
 
+/**
+ * Functional component representing details of a show.
+ * @component
+ * @param {Object} props - The properties passed to the component.
+ * @param {Object} props.show - The show details.
+ * @param {string} props.show.title - The title of the show.
+ * @param {string} props.show.image - The URL of the show's image.
+ * @param {string} props.show.description - The description of the show.
+ * @param {Array} props.show.seasons - The array of seasons for the show.
+ * @param {string} props.show.updated - The last update date of the show.
+ * @param {Function} props.onClose - The function to close the show details.
+ * @returns {JSX.Element} - The rendered JSX element.
+ */
 const Show = ({ show, onClose }) => {
   return (
     <div className="ShowDetails">
@@ -45,6 +58,22 @@ const Show = ({ show, onClose }) => {
   );
 };
 
+/**
+ * Prop types for the Show component.
+ * @typedef {Object} ShowProps
+ * @property {Object} show - The show details.
+ * @property {string} show.title - The title of the show.
+ * @property {string} show.image - The URL of the show's image.
+ * @property {string} show.description - The description of the show.
+ * @property {Array} show.seasons - The array of seasons for the show.
+ * @property {string} show.updated - The last update date of the show.
+ * @property {Function} onClose - The function to close the show details.
+ */
+
+/**
+ * PropTypes for the Show component.
+ * @type {ShowProps}
+ */
 Show.propTypes = {
   show: PropTypes.shape({
     title: PropTypes.string.isRequired,

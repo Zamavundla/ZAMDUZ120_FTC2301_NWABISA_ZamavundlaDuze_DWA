@@ -29,7 +29,7 @@ export default function App() {
   return (
     <Router>
       <Routes>
-        {!session ? (
+        {session ? (
           <>
             <Route path="/" element={<LoginPage setSession={setSession} />} />
             <Route path="/SignUp" element={<SignUpPage />} />

@@ -30,6 +30,7 @@ const ContentContainer = styled('div')({
   width: '100%', 
 });
 
+
 const defaultTheme = createTheme();
 
 function LoginPage({ setSession }) {
