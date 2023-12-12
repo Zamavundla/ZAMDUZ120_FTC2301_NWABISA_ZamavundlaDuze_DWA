@@ -24,12 +24,16 @@ The Podcast App is built using the following technologies:
 
 1. Clone the repository to your local machine.
 
+git clone https://github.com/your-username/podcast-app.git
 
 2. Install dependencies using npm or yarn.
 
+cd DWA_18-FinalCapstoneProject
+npm install
 
 3. Start the development server.
 
+npm run dev
 
 The application will run at `http://localhost:3000/`.
 
