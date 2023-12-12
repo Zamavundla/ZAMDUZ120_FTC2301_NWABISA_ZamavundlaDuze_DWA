@@ -86,8 +86,8 @@ Zamavundla Samkelisiwe Duze
 
 ## Wireframe
 
-Check the wireframe of the Podcast App on [Figma]
+Check the wireframe of the Podcast App on TBC
 
 ## Deployed App
 
-Access the deployed Podcast App [here]
+Access the deployed Podcast App TBC
