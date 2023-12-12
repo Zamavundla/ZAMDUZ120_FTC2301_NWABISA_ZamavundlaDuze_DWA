@@ -66,9 +66,15 @@ The application will run at `http://localhost:3000/`.
 
 8. The "Favorites" link in the navbar provides quick access to all favorited episodes.
 
-## Contributions
+# Acknowledgements
 
-Contributions to the Podcast App are welcome! If you encounter issues or have improvement suggestions, feel free to open an issue or submit a pull request.
+Special thanks to the following contributors for their valuable contributions to this project:
+
+- [Keabetswe Montsho](https://github.com/MVURICE)
+- [Mogamat Toufeeq Farat](https://github.com/Toufeeq1)
+
+Their insights, code contributions, and dedication have been instrumental in improving this project. We appreciate their efforts and commitment.
+
 
 ## License
 
