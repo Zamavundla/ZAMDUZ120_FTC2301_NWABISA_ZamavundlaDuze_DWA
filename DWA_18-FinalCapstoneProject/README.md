@@ -1,124 +1,83 @@
 # Podcast App
 
-Welcome to the Podcast App project! This readme file provides an overview of the technology, data structure, endpoints, relationships, user stories, and deployment instructions for the app.
+The Podcast App is a web application designed for users to explore and listen to podcasts. It offers various features such as browsing podcasts, playing episodes, managing favorites, and seamless device responsiveness.
 
-## Technology
+## Features
 
-This project allows you to leverage various technologies and frameworks to build a functional podcast app. While you can use plain JavaScript, it's recommended to use a framework and/or build process to manage complexity. You have the freedom to choose technologies like Next.js, Create React App (CRA), or Vue.js. TypeScript is recommended but not mandatory.
+- Browse and view podcasts with titles, images, season count, genres, and last updated date.
+- Sort podcasts alphabetically (A-Z or Z-A) or by the last updated date (newest or oldest).
+- Search for specific podcasts using a fuzzy search bar.
+- Detailed view for each podcast showcasing its seasons and episodes.
+- Audio player with playback controls, progress display, and duration for episodes.
+- Mark episodes as favorites and access a list of all favorite episodes.
+- Responsive design ensuring a consistent experience across different devices.
 
-During the final assessment, your understanding of the chosen technologies and your ability to discuss your code will contribute to your project's success.
+## Technology Stack
 
-## Data
+The Podcast App is built using the following technologies:
 
-The app's data revolves around three main semantic units:
+- React.js: Front-end library for building user interfaces.
+- Fuse.js: Lightweight fuzzy-search library for efficient search functionality.
+- CSS: Styling the components and layout of the application.
 
-- EPISODE: Represents a specific MP3 file that users can listen to.
-- SEASON: A collection of EPISODEs released over a specific timespan.
-- SHOW: Refers to a podcast containing one or more SEASONs.
+## Setup
 
-Additionally, the API exposes a PREVIEW of SHOWs with basic data but no SEASON or EPISODE information.
+1. Clone the repository to your local machine.
 
-## Endpoints
 
-The data can be fetched from two endpoints:
+2. Install dependencies using npm or yarn.
 
-1. `https://podcast-api.netlify.app/shows`: Returns an array of PREVIEW objects.
-2. `https://podcast-api.netlify.app/id/<ID>`: Returns a single SHOW object with embedded SEASON and EPISODE objects.
 
-## Relationships
+3. Start the development server.
 
-The project involves several related data types: EPISODE, SEASON, SHOW, PREVIEW, and GENRE. Key relationships include:
 
-- Multiple EPISODEs make up a SEASON.
-- Multiple SEASONs make up a SHOW.
-- SHOW and PREVIEW share the id property, representing different forms of the same data.
-- Both SHOW and PREVIEW have a property named GENRE. GENRE inside PREVIEW is an array of numbers (id), while GENRE inside SHOW is an array of strings (title).
+The application will run at `http://localhost:3000/`.
 
-For further details on relationships, refer to the provided chart in the project.
+## Components Overview
 
-## Genre Titles
+- `App`: Main component fetching podcast data, handling sorting, and managing selected show details.
+- `AudioPlayer`: Component responsible for playback controls, time display, and duration.
+- `Card`: Displaying information about a podcast show.
+- `Episodes`: Details of an episode, including playback and favorite options.
+- `Navbar`: Navigation bar with links for navigation within the app.
+- `SearchBar`: Input field for fuzzy-search functionality.
+- `SeasonCard`: Displaying details of a season of a podcast show.
+- `ShowDetails`: Detailed view of a show, including seasons and episodes.
 
-Genre information is exposed on PREVIEW using GENRE ids. A mapping between GENRE ids and titles is recommended for better code organization.
+## Usage
 
-| ID | Title                              |
-|----|------------------------------------|
-| 1  | Personal Growth                    |
-| 2  | True Crime and Investigative Journalism |
-| 3  | History                            |
-| 4  | Comedy                             |
-| 5  | Entertainment                      |
-| 6  | Business                           |
-| 7  | Fiction                            |
-| 8  | News                               |
-| 9  | Kids and Family                    |
+1. Upon loading, the app fetches podcast data and displays a list of podcasts.
 
-## User Stories
+2. Users can sort podcasts alphabetically or by the last updated date using provided buttons.
 
-Your goal is to meet the requirements of the following user stories, creating a fully functional podcast app:
+3. The search bar allows users to find specific podcasts via partial titles using fuzzy search.
 
-1. The app is deployed to a custom Netlify URL.
-2. All views display correctly on "iPhone SE" or other devices.
-3. Favicon information is set using a favicon generator tool.
-4. Metatag information is added, including absolute Netlify URLs.
-5. Show data is fetched via a call to `https://podcast-api.netlify.app/shows`.
-6. Specific show data is fetched from individual show endpoints.
-7. Loading states are implemented during data fetching.
-8. Users can view show details by seasons, sorted by number.
-9. Users can listen to episodes in a season of a show.
-10. A view shows only episodes for a selected season.
-11. Users can toggle between different seasons for the same show.
-12. All available show names are displayed.
-13. Preview images of shows are shown while browsing.
-14. The number of seasons per show is displayed.
-15. A human-readable last update date is shown for shows.
-16. Genres associated with a show are displayed as genre titles.
-17. Preview images of seasons for a show are displayed.
-18. The number of episodes in a season is shown.
-19. Users can return to a show view from a season-specific view.
-20. Users can mark episodes as favorites.
-21. Users can view all their favorite episodes.
-22. Show and season of episodes in favorites are displayed.
-23. Episodes are grouped in favorites by season/show.
-24. Users can remove episodes from favorites.
-25. Users can sort shows by title in A-Z order.
-26. Users can sort shows by title in Z-A order.
-27. Shows can be sorted by date updated (ascending).
-28. Shows can be sorted by date updated (descending).
-29. Users can filter shows by title using a text input.
-30. Fuzzy matching allows finding shows based on strings.
-31. Shows are automatically filtered by genre when clicked.
-32. Users see the date/time when an episode is added to favorites.
-33. Favorites can be arranged by show titles (A-Z).
-34. Favorites can be arranged by show titles (Z-A).
-35. Favorites can be arranged by date updated (ascending).
-36. Favorites can be arranged by date updated (descending).
-37. The audio player displays progress and episode length.
-38. The audio player is always visible for continuous listening.
-39. Users are prompted to confirm closing when audio plays.
-40. The app remembers the last played show and episode.
-41. The app remembers fully listened-to shows and episodes.
-42. The app remembers the stopping timestamp within 10 seconds.
-43. The app shows progress timestamps for started episodes.
-44. Users can reset all listening progress.
-45. A sliding carousel of potential shows is on the landing page.
-46. Users can log in via Supabase authentication.
-47. User favorites are stored in the Supabase database.
-48. User favorites sync automatically when logged in.
-49. Users can share favorites via a publicly accessible URL.
+4. Clicking a podcast card shows detailed information about the show, including its seasons and episodes.
 
-## Deployment
+5. In the detailed view, users can click a season to see its episodes and play them using the audio player.
 
-To deploy the project, follow these steps:
+6. The audio player displays playback time and episode duration and allows seeking through the episode.
 
-1. Ensure the project is ready for deployment, meeting the user story requirements.
-2. Deploy the project to a custom Netlify URL.
-3. Make sure that all views display correctly on the smallest mobile device, such as "iPhone SE" (you can use Chrome Dev tools for emulation).
-4. Set up favicon information using https://realfavicongenerator.net/ and metatag information via https://metatags.io/. Replace URL values with absolute Netlify URLs.
-5. Load show data via a fetch call from `https://podcast-api.netlify.app/shows`.
-6. Fetch data for individual shows from their respective endpoint.
-7. Implement loading states for initial and new data fetching.
-8. Ensure all user stories are met and the app provides a seamless user experience.
+7. Users can mark episodes as favorites, view all favorite episodes in the "All Favorites" section.
 
-## Conclusion
+8. The "Favorites" link in the navbar provides quick access to all favorited episodes.
 
-This readme provides an overview of the Podcast App project, including its technology stack, data structure, endpoints, relationships, user stories, deployment process. Have fun building your fully functional podcast app!
+## Contributions
+
+Contributions to the Podcast App are welcome! If you encounter issues or have improvement suggestions, feel free to open an issue or submit a pull request.
+
+## License
+
+The Podcast App is open-source software licensed under the MIT License. You're free to use, modify, and distribute the code under the terms of the MIT License. Refer to the `LICENSE` file for more details.
+
+## Author
+
+Zamavundla Samkelisiwe Duze
+
+## Wireframe
+
+Check the wireframe of the Podcast App on [Figma]
+
+## Deployed App
+
+Access the deployed Podcast App [here]
